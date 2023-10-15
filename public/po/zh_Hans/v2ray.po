@@ -104,6 +104,10 @@ msgstr "在这里添加策略等级"
 msgid "Add routing balancers here"
 msgstr "在这里添加路由负载均衡器"
 
+#: package/htdocs/luci-static/resources/view/v2ray/routing.js:78
+msgid "Balancer strategy"
+msgstr "负载均衡策略"
+
 #: package/htdocs/luci-static/resources/view/v2ray/routing.js:42
 msgid "Add routing rules here"
 msgstr "在这里添加路由规则"

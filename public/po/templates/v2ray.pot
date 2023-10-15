@@ -104,6 +104,10 @@ msgstr ""
 msgid "Add routing balancers here"
 msgstr ""
 
+#: package/htdocs/luci-static/resources/view/v2ray/routing.js:78
+msgid "Balancer strategy"
+msgstr ""
+
 #: package/htdocs/luci-static/resources/view/v2ray/routing.js:42
 msgid "Add routing rules here"
 msgstr ""

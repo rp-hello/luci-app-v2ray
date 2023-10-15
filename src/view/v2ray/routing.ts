@@ -150,7 +150,7 @@ return L.view.extend<SectionItem[][]>({
     o = s3.option(form.Value, "tag", _("Tag"));
     o.rmempty = false;
 
-    o = s3.option(form.ListValue, "strategy_type", _("StrategyType"));
+    o = s3.option(form.ListValue, "strategy_type", _("Balancer strategy"));
     o.value("random");
     o.value("leastPing");
     o.modalonly = true;
