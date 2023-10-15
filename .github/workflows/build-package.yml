@@ -14,8 +14,8 @@ jobs:
   push-and-build:
     runs-on: ubuntu-latest
     env:
-      SDK_URL_PATH: https://downloads.openwrt.org/releases/19.07.3/targets/x86/64
-      SDK_NAME: -sdk-19.07.3-x86-64_
+      SDK_URL_PATH: https://downloads.openwrt.org/releases/19.07.9/targets/x86/64
+      SDK_NAME: -sdk-19.07.9-x86-64_
       CONFIG_CCACHE: y
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
@@ -73,7 +73,7 @@ jobs:
     - name: Install Dependencies
       run: |
         DEBIAN_FRONTEND=noninteractive \
-        sudo apt-get install -y ccache gettext libncurses5-dev xsltproc gcc g++ python2
+        sudo apt-get install -y ccache gettext libncurses5-dev xsltproc gcc-4.8 g++-4.8 python2
 
     - name: Create Directories
       run: |
