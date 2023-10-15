@@ -58,6 +58,8 @@ return L.view.extend<string[]>({
     o.value("shadowsocks", "Shadowsocks");
     o.value("socks", "Socks");
     o.value("vmess", "VMess");
+    // o.value("trojan", "Trojan");// Add Trojan Protocol support
+    // o.value("vless", "VLESS"); // Add VLESS Protocol support
 
     // Settings - Dokodemo-door
     o = s.taboption(
@@ -354,6 +356,36 @@ return L.view.extend<string[]>({
     o.depends("protocol", "socks");
     o.datatype = "uinteger";
 
+    // Settings - Trojan
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_trojan_address",
+      "%s - %s".format("Trojan", _("Address"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "trojan");
+    o.datatype = "host";
+
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_trojan_port",
+      "%s - %s".format("Trojan", _("Port"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "trojan");
+    o.datatype = "port";
+
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_trojan_password",
+      "%s - %s".format("Trojan", _("Password"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "trojan");
+
     // Settings - VMess
     o = s.taboption(
       "general",
@@ -434,6 +466,56 @@ return L.view.extend<string[]>({
     o.modalonly = true;
     o.depends("protocol", "vmess");
 
+    // Settings - VLESS
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_vless_address",
+      "%s - %s".format("VLESS", _("Address"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "vless");
+    o.datatype = "host";
+
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_vless_port",
+      "%s - %s".format("VLESS", _("Port"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "vless");
+    o.datatype = "port";
+
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_vless_user_id",
+      "%s - %s".format("VLESS", _("User ID"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "vless");
+
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_vless_user_level",
+      "%s - %s".format("VLESS", _("User level"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "vless");
+    o.datatype = "and(uinteger, max(10))";
+
+    o = s.taboption(
+      "general",
+      form.ListValue,
+      "s_vless_user_encryption",
+      "%s - %s".format("VLESS", _("Encryption"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "vless");
+    o.value("none", "none");
+
     /** Stream Settings  **/
     o = s.taboption("stream", form.ListValue, "ss_network", _("Network"));
     o.value("");
@@ -449,6 +531,24 @@ return L.view.extend<string[]>({
     o.value("");
     o.value("none", _("None"));
     o.value("tls", "TLS");
+
+    // XTLS Flows
+    // o = s.taboption(
+    //   "stream",
+    //   form.ListValue,
+    //   "s_xtls_flow",
+    //   _("XTLS Flow"),
+    //   _("Use XTLS mode in VLESS protocol")
+    // );
+    // o.modalonly = true;
+    // o.value("none", _("None"));
+    // o.value("xtls-rprx-direct");
+    // o.value("xtls-rprx-direct-udp443");
+    // o.value("xtls-rprx-origin");
+    // o.value("xtls-rprx-origin-udp443");
+    // o.value("xtls-rprx-splice");
+    // o.value("xtls-rprx-splice-udp443");
+    // o.depends("ss_security", "tls");
 
     // Stream Settings - TLS
     o = s.taboption(
