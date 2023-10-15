@@ -730,12 +730,17 @@ clear_v2ray_rules() {
 	iptables-save --counters | grep -v "V2RAY" | iptables-restore --counters
 
 	while ip rule del fwmark 1 lookup 100 2>/dev/null; do true; done
+	while ip rule del fwmark 0x1 lookup 100 2>/dev/null; do true; done
+	while ip rule del fwmark 0x1/0x1 lookup 100 2>/dev/null; do true; done
 
 	ip route flush table 100
 	ip route del local 0.0.0.0/0 dev lo table 100 2>/dev/null
 
-	while ip -6 rule del fwmark 1 lookup 100 2>/dev/null; do true; done
 	ip6tables-save --counters | grep -v "V2RAY" | ip6tables-restore --counters
+
+	while ip -6 rule del fwmark 1 lookup 100 2>/dev/null; do true; done
+	while ip -6 rule del fwmark 0x1 lookup 100 2>/dev/null; do true; done
+	while ip -6 rule del fwmark 0x1/0x1 lookup 100 2>/dev/null; do true; done
 
 	ip -6 route flush table 100
 	ip -6 route del local 0.0.0.0/0 dev lo table 100 2>/dev/null
