@@ -1,0 +1,40 @@
+name: OpenWrt Build
+
+on:
+  push:
+
+env:
+  PACKAGE_NAME: luci-app-v2ray
+
+jobs:
+  build:
+    name: ${{ matrix.arch }}-${{ matrix.branch }} build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch:
+          # - x86_64
+          - arm_cortex-a7
+          # - arm_cortex-a9
+        branch:
+          - openwrt-21.02
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+
+      - name: Build
+        uses: openwrt/gh-action-sdk@main
+        env:
+          ARCH: ${{ matrix.arch }}-${{ matrix.branch }}
+          FEED_DIR: ${{ github.workspace }}
+          PACKAGES: ${{ env.PACKAGE_NAME }}
+
+      - name: Store packages
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.arch }}-${{ matrix.branch }}-packages
+          path: bin/packages/${{ matrix.arch }}/packages/*.ipk
