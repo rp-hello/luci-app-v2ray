@@ -230,10 +230,6 @@ msgstr ""
 msgid "CHNRoute"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:109
-msgid "CHNRoute list updated."
-msgstr ""
-
 #: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:165
 msgid "CN Direct"
 msgstr ""
@@ -262,7 +258,7 @@ msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:188
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:188
-msgid "Use xTLS mode in protocol"
+msgid "Use xTLS flow"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:185
@@ -464,12 +460,9 @@ msgid "Extra proxy list"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:76
-msgid "Failed to decode GFWList."
+msgid "Failed to decode data."
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:117
-msgid "Failed to fetch CHNRoute list."
-msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:79
 msgid "Failed to fetch GFWList."
@@ -509,7 +502,7 @@ msgid "GFWList mirror"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:68
-msgid "GFWList updated."
+msgid "%s update completed"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:35

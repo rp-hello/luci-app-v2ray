@@ -275,15 +275,16 @@ inbound_section_validate() {
 		's_socks_ip:host' \
 		's_socks_user_level:uinteger' \
 		's_vmess_client_id:string' \
-		's_vmess_client_alter_id:and(uinteger, max(65535))' \
+		#'s_vmess_client_alter_id:and(uinteger, max(65535))' \
 		's_vmess_client_email:string' \
 		's_vmess_client_user_level:uinteger' \
-		's_vmess_default_alter_id:and(uinteger, max(65535))' \
+		#'s_vmess_default_alter_id:and(uinteger, max(65535))' \
 		's_vmess_default_user_level:uinteger' \
 		's_vmess_detour_to:string' \
 		's_vmess_disable_insecure_encryption:bool:0' \
 		'ss_network:or("tcp", "kcp", "ws", "http", "domainsocket", "quic")' \
 		'ss_security:or("none", "tls")' \
+		's_xtls_flow:or("none", "xtls-rprx-direct", "xtls-rprx-direct-udp443", "xtls-rprx-origin", "xtls-rprx-origin-udp443", "xtls-rprx-splice", "xtls-rprx-splice-udp443")' \
 		'ss_tls_server_name:host' \
 		'ss_tls_alpn:list(string)' \
 		'ss_tls_allow_insecure:bool:0' \
@@ -364,7 +365,7 @@ outbound_section_validate() {
 		's_vmess_address:host' \
 		's_vmess_port:port' \
 		's_vmess_user_id:string' \
-		's_vmess_user_alter_id:and(uinteger, max(65535))' \
+		#'s_vmess_user_alter_id:and(uinteger, max(65535))' \
 		's_vmess_user_security:or("auto", "aes-128-gcm", "chacha20-poly1305", "none")' \
 		's_vmess_user_level:uinteger' \
 		's_vless_address:host' \
@@ -1212,14 +1213,6 @@ add_inbound_setting() {
 
 		json_close_object # settings
 		;;
-		# "loopback")
-		# 	json_add_object "settings"
-
-		# 	if [ -n "$s_loopback_inboundtag" ] ; then
-		# 		json_add_string "inboundTag" "$s_loopback_inboundtag"
-		# 	fi
-		# 	json_close_object
-		# 	;;
 	"mtproto")
 		json_add_object "settings"
 
@@ -1290,8 +1283,8 @@ add_inbound_setting() {
 
 			json_add_string "id" "$s_vmess_client_id"
 
-			test -n "$s_vmess_client_alter_id" &&
-				json_add_int "alterId" "$s_vmess_client_alter_id"
+			# test -n "$s_vmess_client_alter_id" &&
+			# 	 json_add_int "alterId" "$s_vmess_client_alter_id"
 			test -n "$s_vmess_client_email" &&
 				json_add_string "email" "$s_vmess_client_email"
 			test -n "$s_vmess_client_user_level" &&
@@ -1303,8 +1296,8 @@ add_inbound_setting() {
 
 		json_add_object "default"
 
-		test -n "$s_vmess_default_alter_id" &&
-			json_add_int "alterId" "$s_vmess_default_alter_id"
+		# test -n "$s_vmess_default_alter_id" &&
+		# 	json_add_int "alterId" "$s_vmess_default_alter_id"
 		test -n "$s_vmess_default_user_level" &&
 			json_add_int "level" "$s_vmess_default_user_level"
 
@@ -1327,11 +1320,16 @@ add_inbound_setting() {
 	test -n "$ss_network" &&
 		json_add_string "network" "$ss_network"
 
-	test -n "$ss_security" &&
-		json_add_string "security" "$ss_security"
-
 	if [ "$ss_security" = "tls" ]; then
 		json_add_object "tlsSettings"
+		if [ "$s_xtls_flow" != "none" ]; then
+			json_add_string "security" "xtls"
+			json_add_object "xtlsSettings"
+
+		else
+			json_add_string "security" "$ss_security"
+			json_add_object "tlsSettings"
+		fi
 
 		test -n "$ss_tls_server_name" &&
 			json_add_string "serverName" "$ss_tls_server_name"
@@ -1363,6 +1361,9 @@ add_inbound_setting() {
 		json_close_array # certificates
 
 		json_close_object # tlsSettings
+	else
+		test -n "$ss_security" &&
+			json_add_string "security" "$ss_security"
 	fi
 
 	case "${ss_network:-x}" in
@@ -1797,7 +1798,7 @@ add_outbound_setting() {
 		json_add_array "users"
 		json_add_object ""
 		json_add_string "id" "$s_vmess_user_id"
-		json_add_int "alterId" "$s_vmess_user_alter_id"
+		# json_add_int "alterId" "$s_vmess_user_alter_id"
 		test -n "$s_vmess_user_security" &&
 			json_add_string "security" "$s_vmess_user_security"
 		test -n "$s_vmess_user_level" &&

@@ -409,15 +409,15 @@ return L.view.extend<string[]>({
     o.modalonly = true;
     o.depends("protocol", "vmess");
 
-    o = s.taboption(
-      "general",
-      form.Value,
-      "s_vmess_client_alter_id",
-      "%s - %s".format("VMess", _("Client alter ID"))
-    );
-    o.modalonly = true;
-    o.depends("protocol", "vmess");
-    o.datatype = "and(min(0), max(65535))";
+    // o = s.taboption(
+    //   "general",
+    //   form.Value,
+    //   "s_vmess_client_alter_id",
+    //   "%s - %s".format("VMess", _("Client alter ID"))
+    // );
+    // o.modalonly = true;
+    // o.depends("protocol", "vmess");
+    // o.datatype = "and(min(0), max(65535))";
 
     o = s.taboption(
       "general",
@@ -438,15 +438,15 @@ return L.view.extend<string[]>({
     o.depends("protocol", "vmess");
     o.datatype = "uinteger";
 
-    o = s.taboption(
-      "general",
-      form.Value,
-      "s_vmess_default_alter_id",
-      "%s - %s".format("VMess", _("Default alter ID"))
-    );
-    o.modalonly = true;
-    o.depends("protocol", "vmess");
-    o.datatype = "and(min(0), max(65535))";
+    // o = s.taboption(
+    //   "general",
+    //   form.Value,
+    //   "s_vmess_default_alter_id",
+    //   "%s - %s".format("VMess", _("Default alter ID"))
+    // );
+    // o.modalonly = true;
+    // o.depends("protocol", "vmess");
+    // o.datatype = "and(min(0), max(65535))";
 
     o = s.taboption(
       "general",
@@ -546,22 +546,22 @@ return L.view.extend<string[]>({
     o.value("tls", "TLS");
 
     // XTLS Flows
-    // o = s.taboption(
-    //   "stream",
-    //   form.ListValue,
-    //   "s_xtls_flow",
-    //   _("XTLS Flow"),
-    //   _("Use XTLS mode in VLESS protocol")
-    // );
-    // o.modalonly = true;
-    // o.value("none", _("None"));
-    // o.value("xtls-rprx-direct");
-    // o.value("xtls-rprx-direct-udp443");
-    // o.value("xtls-rprx-origin");
-    // o.value("xtls-rprx-origin-udp443");
-    // o.value("xtls-rprx-splice");
-    // o.value("xtls-rprx-splice-udp443");
-    // o.depends("ss_security", "tls");
+    o = s.taboption(
+      "stream",
+      form.ListValue,
+      "s_xtls_flow",
+      _("xTLS Flow"),
+      _("Use xTLS flow")
+    );
+    o.modalonly = true;
+    o.value("none", _("None"));
+    o.value("xtls-rprx-direct");
+    o.value("xtls-rprx-direct-udp443");
+    o.value("xtls-rprx-origin");
+    o.value("xtls-rprx-origin-udp443");
+    o.value("xtls-rprx-splice");
+    o.value("xtls-rprx-splice-udp443");
+    o.depends("ss_security", "tls");
 
     // Stream Settings - TLS
     o = s.taboption(
