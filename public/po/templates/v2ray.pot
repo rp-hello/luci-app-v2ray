@@ -353,6 +353,10 @@ msgstr ""
 msgid "Domain resolution strategy"
 msgstr ""
 
+#: package/htdocs/luci-static/resources/view/v2ray/routing.js:28
+msgid "Domain name matching algorithm"
+msgstr ""
+
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:225
 msgid "Domain strategy"
 msgstr ""

@@ -52,6 +52,14 @@ return L.view.extend<SectionItem[][]>({
     o.value("IPOnDemand");
 
     o = s1.option(
+      form.ListValue,
+      "domain_matcher",
+      _("Domain name matching algorithm")
+    );
+    o.value("linear");
+    o.value("mph");
+
+    o = s1.option(
       form.MultiValue,
       "rules",
       _("Rules"),
