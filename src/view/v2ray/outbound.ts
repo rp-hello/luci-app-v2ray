@@ -270,7 +270,6 @@ return L.view.extend<string[]>({
     }
 
     o = s.taboption("general", form.ListValue, "protocol", _("Protocol"));
-    o.modalonly = true;
     o.value("blackhole", "Blackhole");
     o.value("dns", "DNS");
     o.value("freedom", "Freedom");
@@ -696,10 +695,10 @@ return L.view.extend<string[]>({
     o.value("http", "HTTP/2");
     o.value("domainsocket", "Domain Socket");
     o.value("quic", "QUIC");
+    o.value("grpc", "gRPC"); // add gRPC
 
     o = s.taboption("stream", form.ListValue, "ss_security", _("Security"));
     o.modalonly = true;
-    o.value("");
     o.value("none", _("None"));
     o.value("tls", "TLS");
 
@@ -708,8 +707,8 @@ return L.view.extend<string[]>({
       "stream",
       form.ListValue,
       "s_xtls_flow",
-      _("XTLS Flow"),
-      _("Use XTLS mode in VLESS protocol")
+      _("xTLS Flow"),
+      _("Use xTLS mode in protocol")
     );
     o.modalonly = true;
     o.value("none", _("None"));
@@ -1081,6 +1080,63 @@ return L.view.extend<string[]>({
     o.value("wechat-video", _("Wechat Video"));
     o.value("dtls", "DTLS 1.2");
     o.value("wireguard", "WireGuard");
+
+    // Stream Settings - gRPC
+    o = s.taboption(
+      "stream",
+      form.Value,
+      "service_name",
+      "%s - %s".format("gRPC", _("Service name"))
+    );
+    o.depends("ss_network", "grpc");
+    o.modalonly = true;
+    o = s.taboption(
+      "stream",
+      form.Flag,
+      "multi_mode",
+      "%s - %s".format("gRPC", _("Multi mode"))
+    );
+    o.modalonly = true;
+    o.depends("ss_network", "grpc");
+
+    o = s.taboption(
+      "stream",
+      form.Value,
+      "idle_timeout",
+      "%s - %s".format("gRPC", _("Idle timeout"))
+    );
+    o.modalonly = true;
+    o.datatype = "uinteger";
+    o.depends("ss_network", "grpc");
+
+    o = s.taboption(
+      "stream",
+      form.Value,
+      "health_check_timeout",
+      "%s - %s".format("gRPC", _("Health check timeout"))
+    );
+    o.modalonly = true;
+    o.datatype = "uinteger";
+    o.depends("ss_network", "grpc");
+
+    o = s.taboption(
+      "stream",
+      form.Flag,
+      "permit_without_stream",
+      "%s - %s".format("gRPC", _("Permit without stream"))
+    );
+    o.modalonly = true;
+    o.depends("ss_network", "grpc");
+
+    o = s.taboption(
+      "stream",
+      form.Value,
+      "initial_windows_size",
+      "%s - %s".format("gRPC", _("Initial windows size"))
+    );
+    o.modalonly = true;
+    o.datatype = "uinteger";
+    o.depends("ss_network", "grpc");
 
     // Stream Settings - Socket Options
     o = s.taboption(

@@ -134,7 +134,7 @@ return L.view.extend<SectionItem[][]>({
     }
 
     o = s2.option(form.ListValue, "balancer_tag", _("Balancer tag"));
-    //o.depends("outbound_tag", "");
+    o.depends("outbound_tag", "");
     o.value("");
     for (const s of routingBalancers) {
       o.value(s.caption);

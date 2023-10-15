@@ -17,10 +17,34 @@ msgstr "版本"
 msgid "metadata only"
 msgstr "仅使用元数据推断"
 
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:498
+msgid "Service name"
+msgstr "服务名称"
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:497
+msgid "Multi mode"
+msgstr "多模式"
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:496
+msgid "Idle timeout"
+msgstr "空闲超时"
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:475
+msgid "Health check timeout"
+msgstr "健康检查超时"
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:473
+msgid "Permit without stream"
+msgstr "无流许可"
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:472
+msgid "Initial windows size"
+msgstr "初始窗口大小"
+
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:400
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:500
-msgid "XTLS Flow"
-msgstr "XTLS流控"
+msgid "xTLS Flow"
+msgstr "xTLS流控"
 
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:271
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:286
@@ -238,8 +262,8 @@ msgstr "客户端IP"
 
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:188
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:188
-msgid "Use XTLS mode in VLESS protocol"
-msgstr "VLESS协议中使用XTLS模式"
+msgid "Use xTLS mode in protocol"
+msgstr "协议中使用XTLS模式"
 
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:185
 msgid "Client User level"
@@ -1401,7 +1425,7 @@ msgid "SubjectSelector"
 msgstr "出站标识前缀"
 
 #: package/htdocs/luci-static/resources/view/v2ray/observatory.ts:103
-msgid "InnerValue"
+msgid "empty use the built-in value"
 msgstr "留空使用内建测试地址"
 
 #: package/htdocs/luci-static/resources/view/v2ray/observatory.ts:103

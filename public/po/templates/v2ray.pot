@@ -17,9 +17,33 @@ msgstr ""
 msgid "metadata only"
 msgstr ""
 
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:498
+msgid "Service name"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:497
+msgid "Multi mode"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:496
+msgid "Idle timeout"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:475
+msgid "Health check timeout"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:473
+msgid "Permit without stream"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:472
+msgid "Initial windows size"
+msgstr ""
+
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:400
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:500
-msgid "XTLS Flow"
+msgid "xTLS Flow"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:271
@@ -238,7 +262,7 @@ msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:188
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:188
-msgid "Use XTLS mode in VLESS protocol"
+msgid "Use xTLS mode in protocol"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:185
