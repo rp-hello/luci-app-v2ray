@@ -6,7 +6,7 @@ local i18n = require "luci.i18n"
 local sys = require "luci.sys"
 
 function index()
-	if not nixio.fs.access("/etc/config/v2ray") then
+	if not nixio.fs.access("/etc/config/luci_v2ray") then
 		return
 	end
 

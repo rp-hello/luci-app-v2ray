@@ -20,7 +20,7 @@ LUCI_DEPENDS:=+jshn +ip +ipset +iptables +iptables-mod-tproxy +resolveip \
 LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/conffiles
-/etc/config/v2ray
+/etc/config/luci_v2ray
 /etc/v2ray/transport.json
 /etc/v2ray/directlist.txt
 /etc/v2ray/proxylist.txt
