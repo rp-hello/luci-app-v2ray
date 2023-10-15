@@ -183,31 +183,9 @@ jobs:
 
         find "${{ github.workspace }}" -type f -name "*.ipk" -exec ls -lh {} \;
         
-    - name: Update Archives
-      uses: actions/upload-artifact@v2
+    - name: Release and Upload Assets
+      uses: softprops/action-gh-release@v1
       with:
-        name: ${{ env.PACKAGE_NAME }}
-        path: '*.ipk'
-        
-    - name: Create release
-      id: create-new-release
-      uses: actions/create-release@v1
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+        files: '*.ipk'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create-new-release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. 
-        asset_path: ./${{ env.PACKAGE_NAME }}.zip
-        asset_name: ${{ env.PACKAGE_NAME }}.zip
-        asset_content_type: application/zip
-
