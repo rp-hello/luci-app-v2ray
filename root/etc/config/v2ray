@@ -154,7 +154,7 @@ config inbound 'socks_proxy'
 
 config inbound 'dokodemo_door'
 	option alias 'dokodemo_door'
-	option port '1081'
+	option port '12345'
 	option protocol 'dokodemo-door'
 	option tag 'transparent'
 	option sniffing_enabled '1'
