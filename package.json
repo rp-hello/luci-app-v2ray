@@ -1,6 +1,6 @@
 {
   "name": "luci-app-v2ray",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "release": "0",
   "description": "LuCI support for v2ray",
   "repository": "git@github.com:BI7PRK/luci-app-v2ray.git",
