@@ -17,16 +17,112 @@
 // "require view";
 "require view/v2ray/include/custom as custom";
 
+var StartControlGroup = form.DummyValue.extend({
+    handleServiceReload: function () {
+        return fs
+            .exec("/etc/init.d/luci_v2ray", ["reload"])
+            .then(
+                L.bind(
+                    function (res) {
+                        if (res.code !== 0) {
+                            ui.addNotification(null, [
+                                E(
+                                    "p",
+                                    _("Reload service failed with code %d").format(res.code)
+                                ),
+                                res.stderr ? E("pre", {}, [res.stderr]) : "",
+                            ]);
+                            L.raise("Error", "Reload failed");
+                        }
+                    },
+                    this
+                )
+            )
+            .catch(function (e) {
+                ui.addNotification(null, E("p", e.message));
+            });
+    },
+    handleServiceStop: function () {
+        return fs
+            .exec("/etc/init.d/luci_v2ray", ["stop"])
+            .then(
+                L.bind(
+                    function (res) {
+                        if (res.code !== 0) {
+                            ui.addNotification(null, [
+                                E(
+                                    "p",
+                                    _("Stop service failed with code %d").format(res.code)
+                                ),
+                                res.stderr ? E("pre", {}, [res.stderr]) : "",
+                            ]);
+                            L.raise("Error", "Stop failed");
+                        }
+                    },
+                    this
+                )
+            )
+            .catch(function (e) {
+                ui.addNotification(null, E("p", e.message));
+            });
+    },
+    handleServiceStart: function () {
+        return fs
+            .exec("/etc/init.d/luci_v2ray", ["start"])
+            .then(
+                L.bind(
+                    function (res) {
+                        if (res.code !== 0) {
+                            ui.addNotification(null, [
+                                E(
+                                    "p",
+                                    _("Start service failed with code %d").format(res.code)
+                                ),
+                                res.stderr ? E("pre", {}, [res.stderr]) : "",
+                            ]);
+                            L.raise("Error", "Start failed");
+                        }
+                    },
+                    this
+                )
+            )
+            .catch(function (e) {
+                ui.addNotification(null, E("p", e.message));
+            });
+    },
+    renderWidget: function (section_id, option_id, cfgvalue) {
+        return E([], [
+            E('span', { 'class': 'control-group' }, [
+                E('button', {
+                    'class': 'cbi-button cbi-button-apply',
+                    'click': ui.createHandlerFn(this, function () {
+                        return this.handleServiceReload();
+                    }),
+                    'disabled': (this.readonly != null) ? this.readonly : this.map.readonly
+                }, _('Reload')),
+                '  ',
+                E('button', {
+                    'class': 'cbi-button cbi-button-apply',
+                    'click': ui.createHandlerFn(this, function () {
+                        return this.handleServiceStop();
+                    }),
+                    'disabled': (this.readonly != null) ? this.readonly : this.map.readonly
+                }, _('Stop')),
+                ' ',
+                E('button', {
+                    'class': 'cbi-button cbi-button-apply',
+                    'click': ui.createHandlerFn(this, function () {
+                        return this.handleServiceStart();
+                    }),
+                    'disabled': (this.readonly != null) ? this.readonly : this.map.readonly
+                }, _('Start'))
+            ])
+        ]);
+    },
+});
+
 // @ts-ignore
 return L.view.extend({
-    handleServiceReload: function(e) {
-        return fs.exec("/etc/init.d/luci_v2ray", [ "reload" ]).then(L.bind((function(e, o) {
-            0 !== o.code && (ui.addNotification(null, [ E("p", _("Reload service failed with code %d").format(o.code)), o.stderr ? E("pre", {}, [ o.stderr ]) : "" ]), 
-            L.raise("Error", "Reload failed"));
-        }), this, e.target)).catch((function(e) {
-            ui.addNotification(null, E("p", e.message));
-        }));
-    },
     load: function() {
         return Promise.all([ v2ray.getSections("inbound"), v2ray.getSections("outbound") ]);
     },
@@ -46,12 +142,16 @@ return L.view.extend({
         s.addremove = false;
         s.anonymous = true;
 
-        var o;
+        let o;
         var a = void 0 === e ? [] : e, r = a[0], t = void 0 === r ? [] : r, n = a[1], i = void 0 === n ? [] : n;
 
-        s.option(custom.RunningStatus, "_status"), (o = s.option(form.Flag, "enabled", _("Enabled"))).rmempty = !1, 
-        (o = s.option(form.Button, "_reload", _("Reload Service"), _("This will restart service when config file changes."))).inputstyle = "action reload", 
-        o.inputtitle = _("Reload"), o.onclick = L.bind(this.handleServiceReload, this), 
+        s.option(custom.RunningStatus, "_status");
+
+        o = s.option(form.Flag, "enabled", _("Enabled"));
+        o.rmempty = false;
+
+        o = s.option(StartControlGroup, '_reload', _("Reload Service"));
+
         (o = s.option(form.Value, "v2ray_file", _("V2Ray file"), _("Set the V2Ray executable file path."))).datatype = "file", 
         o.placeholder = "/usr/bin/v2ray", o.rmempty = !1, (o = s.option(form.Value, "asset_location", _("V2Ray asset location"), _("Directory where geoip.dat and geosite.dat files are, default: same directory as V2Ray file."))).datatype = "directory", 
         o.placeholder = "/usr/bin", (o = s.option(form.Value, "mem_percentage", _("Memory percentage"), _("The maximum percentage of memory used by V2Ray."))).datatype = "and(uinteger, max(100))", 
