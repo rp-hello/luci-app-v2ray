@@ -9,6 +9,11 @@ msgstr ""
 msgid "<code>transport</code> field in top level configuration, JSON string"
 msgstr ""
 
+#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:400
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:500
+msgid "XTLS Flow"
+msgstr ""
+
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:271
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:286
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:335
@@ -36,6 +41,30 @@ msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/transparent-proxy.js:168
 msgid "APNIC delegated mirror"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/dns.js:28
+msgid "Can be configured as a non-private IP address"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/dns.js:42
+msgid "Disable Cache"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/dns.js:45
+msgid "Disable Fallback"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/dns.js:46
+msgid "Disable Fallback If Match"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/dns.js:48
+msgid "Skip Fallback"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/dns.js:50
+msgid "Query Strategy"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/about.js:27
@@ -191,8 +220,13 @@ msgstr ""
 msgid "Client ID"
 msgstr ""
 
-#: package/htdocs/luci-static/resources/view/v2ray/dns.js:29
+#: package/htdocs/luci-static/resources/view/v2ray/dns.js:39
 msgid "Client IP"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:188
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:188
+msgid "Use XTLS mode in VLESS protocol"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:185
@@ -444,7 +478,7 @@ msgid "General Settings"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/dns.js:29
-msgid "Get my public IP address"
+msgid "Visit my public IP address"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/include/custom.js:198
@@ -553,6 +587,7 @@ msgstr ""
 msgid "Inbound"
 msgstr ""
 
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:65
 #: package/htdocs/luci-static/resources/view/v2ray/routing.js:65
 msgid "Inbound tag"
 msgstr ""
@@ -621,7 +656,7 @@ msgid "Log level"
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/about.js:27
-msgid "LuCI support for V2Ray."
+msgid "LuCI support for V2Ray and Xray-core."
 msgstr ""
 
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:495
