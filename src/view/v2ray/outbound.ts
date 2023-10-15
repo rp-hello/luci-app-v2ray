@@ -759,6 +759,7 @@ return L.view.extend<string[]>({
       "%s - %s".format("TLS", _("Reject Unknown SNI"))
     );
     o.depends("ss_security", "tls");
+    o.modalonly = true;
 
     o = s.taboption(
       "stream",
