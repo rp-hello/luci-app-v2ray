@@ -142,7 +142,7 @@ return L.view.extend<SectionItem[][]>({
     o.depends("loglevel", "warning");
     o.depends("loglevel", "error");
 
-    o = s.option(form.Flag, "dnsLog", _("Enabled DSN log"));
+    o = s.option(form.Flag, "dnsLog", _("Enabled"), _("Enabled DNS log"));
 
     o = s.option(form.MultiValue, "inbounds", _("Inbounds enabled"));
     o.depends("config_file", "");
