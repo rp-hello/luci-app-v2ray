@@ -201,7 +201,7 @@ jobs:
         find "${{ github.workspace }}" -type f -name "*.ipk" -exec ls -lh {} \;
 
     - name: Update Archives
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ env.PACKAGE_NAME }}
         path: '*.ipk'
