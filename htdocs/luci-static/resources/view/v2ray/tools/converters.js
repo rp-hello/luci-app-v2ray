@@ -27,24 +27,41 @@ return L.Class.extend({
         }
         return Object.keys(n).sort().join("\n") + "\n";
     },
-    extractCHNRoute: function(t, e) {
-        void 0 === e && (e = !1);
-        for (var r = [], n = e ? /CN\|ipv6\|([0-9a-zA-Z:]+)\|(\d+)/ : /CN\|ipv4\|([\d.]+)\|(\d+)/, a = 0, s = t.split(/\r?\n/); a < s.length; a++) {
-            var i = s[a];
-            if (i && 0 !== i.indexOf("#")) {
-                var c = i.match(n);
-                if (c && c.length >= 3) {
-                    var l = c[1], u = c[2];
-                    if (e) r.push(l + "/" + u); else {
-                        // base log
-                        var o = 32 - Math.log(+u) / Math.log(2);
-                        r.push(l + "/" + o);
-                    }
+
+    extractCHNRoute: function (delegatedlist, ipv6) {
+        void 0 === ipv6 && (ipv6 = !1);
+
+        const delegatedLines = delegatedlist.split(/\r?\n/);
+
+        const ipList = [];
+
+        const regex = ipv6
+            ? /CN\|ipv6\|([0-9a-zA-Z:]+)\|(\d+)/
+            : /CN\|ipv4\|([\d.]+)\|(\d+)/;
+
+        for (const line of delegatedLines) {
+            if (!line || line.indexOf("#") === 0) {
+                continue;
+            }
+
+            const matches = line.match(regex);
+            if (matches && matches.length >= 3) {
+                const [, ip, value] = matches;
+
+                if (ipv6) {
+                    ipList.push(`${ip}/${value}`);
+                } else {
+                    // base log
+                    const mask = 32 - Math.log(+value) / Math.log(2);
+
+                    ipList.push(`${ip}/${mask}`);
                 }
             }
         }
-        return r.join("\n") + "\n";
+
+        return ipList.join("\n") + "\n";
     },
+
     vmessLinkToVmess: function(t) {
         var e, r, n;
         if (!t || !(t = t.trim()) || !(e = t.match(/^vmess:\/\/([a-zA-Z0-9/+]+={0,2})$/i)) || e.length < 2) return null;
