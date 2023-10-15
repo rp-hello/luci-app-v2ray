@@ -16,9 +16,9 @@
 
 return view.extend({
     load: function () {
-        return uci.load("v2ray").then((function () {
-            var a = uci.get("v2ray", "main", "config_file");
-            return a || (a = "/var/etc/v2ray/v2ray.main.json"), Promise.all([Promise.resolve(a), L.resolveDefault(fs.read(a), "")]);
+        return uci.load("luci_v2ray").then((function () {
+            var a = uci.get("luci_v2ray", "main", "config_file");
+            return a || (a = "/var/etc/luci_v2ray/v2ray.main.json"), Promise.all([Promise.resolve(a), L.resolveDefault(fs.read(a), "")]);
         }));
     },
     render: function (data) {

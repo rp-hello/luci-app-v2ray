@@ -20,14 +20,26 @@ return L.view.extend({
     load: function() {
         return v2ray.getLocalIPs();
     },
-    render: function(o) {
-        void 0 === o && (o = []);
-        var e, s = new form.Map("v2ray", "%s - %s".format(_("V2Ray"), _("Inbound"))), t = s.section(form.GridSection, "inbound");
-        t.anonymous = !0, t.addremove = !0, t.sortable = !0, t.modaltitle = function(o) {
-            var e = uci.get("v2ray", o, "alias");
+    render: function(localIPs) {
+        const m = new form.Map("luci_v2ray", "%s - %s".format(_("V2Ray"), _("Inbound")));
+
+        if (localIPs === 0) {
+            localIPs = [];
+        }
+        var o = localIPs;
+        var e, t = m.section(form.GridSection, "inbound");
+        t.anonymous = !0, t.addremove = !0, t.sortable = !0;
+        t.modaltitle = function(section_id) {
+            var e = uci.get("luci_v2ray", section_id, "alias");
             return _("Inbound") + " » " + (null != e ? e : _("Add"));
-        }, t.nodescriptions = !0, t.tab("general", _("General Settings")), t.tab("stream", _("Stream Settings")), 
-        t.tab("other", _("Other Settings")), (
+        };
+        t.nodescriptions = true;
+        
+        t.tab("general", _("General Settings"));
+        t.tab("stream", _("Stream Settings"));
+        t.tab("other", _("Other Settings"));
+
+        (
         /** General settings */
         e = t.taboption("general", form.Value, "alias", _("Alias"))).rmempty = !1, (e = t.taboption("general", form.Value, "listen", _("Listen"))).datatype = "ipaddr";
         for (var a = 0, r = o; a < r.length; a++) {
@@ -87,7 +99,7 @@ return L.view.extend({
             l = d[n];
             e.value(l);
         }
-        return e.datatype = "host", e.placeholder = "127.0.0.1", (e = t.taboption("general", form.Value, "s_socks_user_level", "%s - %s".format("Socks", _("User level")), _("All connections share this level"))).modalonly = !0, 
+        e.datatype = "host", e.placeholder = "127.0.0.1", (e = t.taboption("general", form.Value, "s_socks_user_level", "%s - %s".format("Socks", _("User level")), _("All connections share this level"))).modalonly = !0, 
         e.depends("protocol", "socks"), e.datatype = "uinteger", (
         // Settings - Trojan
         e = t.taboption("general", form.Value, "s_trojan_address", "%s - %s".format("Trojan", _("Address")))).modalonly = !0, 
@@ -216,7 +228,9 @@ return L.view.extend({
         (e = t.taboption("other", form.Flag, "metadata_only", "%s - %s".format(_("metadata only"), _("Enabled")))).modalonly = !0, 
         (e = t.taboption("other", form.ListValue, "allocate_strategy", "%s - %s".format(_("Allocate"), _("Strategy")))).modalonly = !0, 
         e.value(""), e.value("always"), e.value("random"), (e = t.taboption("other", form.Value, "allocate_refresh", "%s - %s".format(_("Allocate"), _("Refresh")))).modalonly = !0, 
-        e.datatype = "uinteger", (e = t.taboption("other", form.Value, "allocate_concurrency", "%s - %s".format(_("Allocate"), _("Concurrency")))).modalonly = !0, 
-        e.datatype = "uinteger", s.render();
+        e.datatype = "uinteger", (e = t.taboption("other", form.Value, "allocate_concurrency", "%s - %s".format(_("Allocate"), _("Concurrency")))).modalonly = !0;
+        e.datatype = "uinteger";
+
+        return m.render();
     }
 });

@@ -31,8 +31,25 @@ return L.view.extend({
         return Promise.all([ v2ray.getSections("inbound"), v2ray.getSections("outbound") ]);
     },
     render: function(e) {
-        var o, a = void 0 === e ? [] : e, r = a[0], t = void 0 === r ? [] : r, n = a[1], i = void 0 === n ? [] : n, l = new form.Map("v2ray", "%s - %s".format(_("V2ray"), _("Global Settings")), "<p>%s</p><p>%s</p>".format(_("A platform for building proxies to bypass network restrictions."), _("For more information, please visit: %s").format('<a href="https://www.v2fly.org" target="_blank">https://www.v2fly.org</a>'))), s = l.section(form.NamedSection, "main", "v2ray");
-        s.addremove = !1, s.anonymous = !0, s.option(custom.RunningStatus, "_status"), (o = s.option(form.Flag, "enabled", _("Enabled"))).rmempty = !1, 
+        const m = new form.Map(
+            "luci_v2ray",
+            "%s - %s".format(_("V2ray"), _("Global Settings")),
+            "<p>%s</p><p>%s</p>".format(
+                _("A platform for building proxies to bypass network restrictions."),
+                _("For more information, please visit: %s").format(
+                    '<a href="https://www.v2fly.org" target="_blank">https://www.v2fly.org</a>'
+                )
+            )
+        );
+
+        const s = m.section(form.NamedSection, "main", "v2ray");
+        s.addremove = false;
+        s.anonymous = true;
+
+        var o;
+        var a = void 0 === e ? [] : e, r = a[0], t = void 0 === r ? [] : r, n = a[1], i = void 0 === n ? [] : n;
+
+        s.option(custom.RunningStatus, "_status"), (o = s.option(form.Flag, "enabled", _("Enabled"))).rmempty = !1, 
         (o = s.option(form.Button, "_reload", _("Reload Service"), _("This will restart service when config file changes."))).inputstyle = "action reload", 
         o.inputtitle = _("Reload"), o.onclick = L.bind(this.handleServiceReload, this), 
         (o = s.option(form.Value, "v2ray_file", _("V2Ray file"), _("Set the V2Ray executable file path."))).datatype = "file", 
@@ -56,10 +73,23 @@ return L.view.extend({
             var g = p[c];
             o.value(g.value, g.caption);
         }
-        return (o = s.option(form.Flag, "stats_enabled", "%s - %s".format(_("Stats"), _("Enabled")))).depends("config_file", ""), 
-        (o = s.option(form.Flag, "transport_enabled", "%s - %s".format(_("Transport"), _("Enabled")))).depends("config_file", ""), 
-        (o = s.option(custom.TextValue, "_transport", "%s - %s".format(_("Transport"), _("Settings")), _("<code>transport</code> field in top level configuration, JSON string"))).depends("transport_enabled", "1"), 
-        o.wrap = "off", o.rows = 5, o.datatype = "string", o.filepath = "/etc/v2ray/transport.json", 
-        o.required = !0, o.isjson = !0, l.render();
+        (o = s.option(form.Flag, "stats_enabled", "%s - %s".format(_("Stats"), _("Enabled")))).depends("config_file", ""), 
+        (o = s.option(form.Flag, "transport_enabled", "%s - %s".format(_("Transport"), _("Enabled")))).depends("config_file", "");
+
+        o = s.option(
+            custom.TextValue,
+            "_transport",
+            "%s - %s".format(_("Transport"), _("Settings")),
+            _("<code>transport</code> field in top level configuration, JSON string")
+        );
+        o.depends("transport_enabled", "1");
+        o.wrap = "off";
+        o.rows = 5;
+        o.datatype = "string";
+        o.filepath = "/etc/luci_v2ray/transport.json";
+        o.required = true;
+        o.isjson = true;
+        
+        return m.render();
     }
 });

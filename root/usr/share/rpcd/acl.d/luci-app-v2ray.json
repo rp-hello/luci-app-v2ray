@@ -8,13 +8,13 @@
         ]
       },
       "uci": [
-        "v2ray"
+        "luci_v2ray"
       ],
       "file": {
-        "/etc/v2ray/*": [
+        "/etc/luci_v2ray/*": [
           "read"
         ],
-        "/var/etc/v2ray/*": [
+        "/var/etc/luci_v2ray/*": [
           "read"
         ],
         "/etc/init.d/luci_v2ray": [
@@ -24,10 +24,10 @@
     },
     "write": {
       "uci": [
-        "v2ray"
+        "luci_v2ray"
       ],
       "file": {
-        "/etc/v2ray/*": [
+        "/etc/luci_v2ray/*": [
           "write"
         ]
       }

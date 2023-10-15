@@ -21,9 +21,9 @@ LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/conffiles
 /etc/config/luci_v2ray
-/etc/v2ray/transport.json
-/etc/v2ray/directlist.txt
-/etc/v2ray/proxylist.txt
+/etc/luci_v2ray/transport.json
+/etc/luci_v2ray/directlist.txt
+/etc/luci_v2ray/proxylist.txt
 endef
 
 include $(TOPDIR)/feeds/luci/luci.mk

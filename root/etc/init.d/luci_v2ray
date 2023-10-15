@@ -7,7 +7,7 @@
 START=99
 USE_PROCD=1
 
-NAME=v2ray
+NAME=luci_v2ray
 CONFIG_FOLDER=/var/etc/$NAME
 
 FILE_V2RAY_DNSMASQ=/tmp/dnsmasq.d/$NAME
@@ -80,9 +80,9 @@ get_file_content() {
 	local filename="$1"
 
 	test -n "$filename" || return
-	test -r "/etc/v2ray/${filename}.txt" || return
+	test -r "/etc/luci_v2ray/${filename}.txt" || return
 
-	cat "/etc/v2ray/${filename}.txt" | grep -v "^$" | grep -v "^#"
+	cat "/etc/luci_v2ray/${filename}.txt" | grep -v "^$" | grep -v "^#"
 }
 
 append_server_ipv4() {
@@ -148,8 +148,8 @@ v2ray_section_validate() {
 		'dnsLog:bool:0' \
 		'stats_enabled:bool:0' \
 		'transport_enabled:bool:0' \
-		'inbounds:list(uci("v2ray", "@inbound"))' \
-		'outbounds:list(uci("v2ray", "@outbound"))'
+		'inbounds:list(uci("luci_v2ray", "@inbound"))' \
+		'outbounds:list(uci("luci_v2ray", "@outbound"))'
 }
 
 dns_section_validate() {
@@ -162,7 +162,7 @@ dns_section_validate() {
 		'tag:string' \
 		'client_ip:ipaddr' \
 		'hosts:list(string)' \
-		'servers:list(uci("v2ray", "@dns_server"))'
+		'servers:list(uci("luci_v2ray", "@dns_server"))'
 }
 
 dns_server_section_validate() {
@@ -188,8 +188,8 @@ routing_section_validate() {
 		'enabled:bool:0' \
 		'domain_strategy:or("AsIs", "IPIfNonMatch", "IPOnDemand")' \
 		'domain_matcher:or("linear", "mph")' \
-		'rules:list(uci("v2ray", "@routing_rule"))' \
-		'balancers:list(uci("v2ray", "@routing_balancer"))'
+		'rules:list(uci("luci_v2ray", "@routing_rule"))' \
+		'balancers:list(uci("luci_v2ray", "@routing_balancer"))'
 }
 
 routing_rule_section_validate() {
@@ -219,7 +219,7 @@ routing_balancer_section_validate() {
 policy_section_validate() {
 	uci_validate_section "$NAME" "policy" "$1" \
 		'enabled:bool:0' \
-		'levels:list(uci("v2ray", "@policy_level"))' \
+		'levels:list(uci("luci_v2ray", "@policy_level"))' \
 		'system_stats_inbound_uplink:bool:0' \
 		'system_stats_inbound_downlink:bool:0'
 }

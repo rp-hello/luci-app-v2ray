@@ -25,7 +25,7 @@ return L.view.extend({
         for (var s = e.split(/\r?\n/), o = 0, t = 0, a = s; t < a.length; t++) {
             var r = a[t], l = void 0;
             if (r && (l = converters.vmessLinkToVmess(r)) && "2" === l.v) {
-                var n = uci.add("v2ray", "outbound");
+                var n = uci.add("luci_v2ray", "outbound");
                 if (n) {
                     const tls = l.tls || "";
                     var d = l.add || "0.0.0.0", p = l.port || "0", i = l.net || "", u = l.type || "", c = l.path || "", v = l.ps || "%s:%s".format(d, p);
@@ -119,9 +119,9 @@ return L.view.extend({
         return Promise.all([ v2ray.getLocalIPs() ]);
     },
     render: function(e) {
-        var s, o = e[0], t = void 0 === o ? [] : o, a = new form.Map("v2ray", "%s - %s".format(_("V2Ray"), _("Outbound"))), r = a.section(form.GridSection, "outbound");
+        var s, o = e[0], t = void 0 === o ? [] : o, a = new form.Map("luci_v2ray", "%s - %s".format(_("V2Ray"), _("Outbound"))), r = a.section(form.GridSection, "outbound");
         r.anonymous = !0, r.addremove = !0, r.sortable = !0, r.modaltitle = function(e) {
-            var s = uci.get("v2ray", e, "alias");
+            var s = uci.get("luci_v2ray", e, "alias");
             return _("Outbound") + " » " + (null != s ? s : _("Add"));
         }, r.nodescriptions = !0, r.tab("general", _("General Settings")), r.tab("stream", _("Stream Settings")), 
         r.tab("other", _("Other Settings")), (

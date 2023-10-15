@@ -5,79 +5,79 @@
 #
 
 # v2ray main
-v2ray=$(uci -q get v2ray.main)
+v2ray=$(uci -q get luci_v2ray.main)
 if [ "x$v2ray" != "xv2ray" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray v2ray
-		rename v2ray.@v2ray[-1]="main"
-		set v2ray.main.enabled="0"
-		commit v2ray
+		add luci_v2ray v2ray
+		rename luci_v2ray.@v2ray[-1]="main"
+		set luci_v2ray.main.enabled="0"
+		commit luci_v2ray
 	EOF
 fi
 
 # dns
-dns=$(uci -q get v2ray.main_dns)
+dns=$(uci -q get luci_v2ray.main_dns)
 if [ "x$dns" != "xdns" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray dns
-		rename v2ray.@dns[-1]="main_dns"
-		set v2ray.main_dns.enabled="0"
-		commit v2ray
+		add luci_v2ray dns
+		rename luci_v2ray.@dns[-1]="main_dns"
+		set luci_v2ray.main_dns.enabled="0"
+		commit luci_v2ray
 	EOF
 fi
 
 # observatory
-observatory=$(uci -q get v2ray.main_observatory)
+observatory=$(uci -q get luci_v2ray.main_observatory)
 if [ "x$observatory" != "xobservatory" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray observatory
-		rename v2ray.@observatory[-1]="main_observatory"
-		set v2ray.main_observatory.enabled="0"
-		commit v2ray
+		add luci_v2ray observatory
+		rename luci_v2ray.@observatory[-1]="main_observatory"
+		set luci_v2ray.main_observatory.enabled="0"
+		commit luci_v2ray
 	EOF
 fi
 
 # routing
-routing=$(uci -q get v2ray.main_routing)
+routing=$(uci -q get luci_v2ray.main_routing)
 if [ "x$routing" != "xrouting" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray routing
-		rename v2ray.@routing[-1]="main_routing"
-		set v2ray.main_routing.enabled="0"
-		commit v2ray
+		add luci_v2ray routing
+		rename luci_v2ray.@routing[-1]="main_routing"
+		set luci_v2ray.main_routing.enabled="0"
+		commit luci_v2ray
 	EOF
 fi
 
 # policy
-policy=$(uci -q get v2ray.main_policy)
+policy=$(uci -q get luci_v2ray.main_policy)
 if [ "x$policy" != "xpolicy" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray policy
-		rename v2ray.@policy[-1]="main_policy"
-		set v2ray.main_policy.enabled="0"
-		commit v2ray
+		add luci_v2ray policy
+		rename luci_v2ray.@policy[-1]="main_policy"
+		set luci_v2ray.main_policy.enabled="0"
+		commit luci_v2ray
 	EOF
 fi
 
 # reverse
-reverse=$(uci -q get v2ray.main_reverse)
+reverse=$(uci -q get luci_v2ray.main_reverse)
 if [ "x$reverse" != "xreverse" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray reverse
-		rename v2ray.@reverse[-1]="main_reverse"
-		set v2ray.main_reverse.enabled="0"
-		commit v2ray
+		add luci_v2ray reverse
+		rename luci_v2ray.@reverse[-1]="main_reverse"
+		set luci_v2ray.main_reverse.enabled="0"
+		commit luci_v2ray
 	EOF
 fi
 
 # transparent_proxy
-transparent_proxy=$(uci -q get v2ray.main_transparent_proxy)
+transparent_proxy=$(uci -q get luci_v2ray.main_transparent_proxy)
 if [ "x$transparent_proxy" != "xtransparent_proxy" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray transparent_proxy
-		rename v2ray.@transparent_proxy[-1]="main_transparent_proxy"
-		set v2ray.main_transparent_proxy.redirect_port=""
-		commit v2ray
+		add luci_v2ray transparent_proxy
+		rename luci_v2ray.@transparent_proxy[-1]="main_transparent_proxy"
+		set luci_v2ray.main_transparent_proxy.redirect_port=""
+		commit luci_v2ray
 	EOF
 fi
 

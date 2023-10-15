@@ -59,7 +59,7 @@ return L.view.extend({
                     if (!a.code && (o = a.content)) {
                         var s = r(o);
                         s ? function(t, e) {
-                            fs.write("/etc/v2ray/" + t + ".txt", e).then((function() {
+                            fs.write("/etc/luci_v2ray/" + t + ".txt", e).then((function() {
                                 ui.showModal(_("List Update"), [ E("p", _("%d list updated.").format(t)), E("div", {
                                     class: "right"
                                 }, E("button", {
@@ -78,14 +78,14 @@ return L.view.extend({
         };
         switch (r) {
           case "gfwlist":
-            var o = uci.get("v2ray", e, "gfwlist_mirror") || "github";
+            var o = uci.get("luci_v2ray", e, "gfwlist_mirror") || "github";
             return a(gfwlistUrls[o], "gfwlist", (function(t) {
                 return converters.extractGFWList(t);
             }));
 
           case "chnroute":
           case "chnroute6":
-            var s = uci.get("v2ray", e, "apnic_delegated_mirror") || "apnic";
+            var s = uci.get("luci_v2ray", e, "apnic_delegated_mirror") || "apnic";
             return a(apnicDelegatedUrls[s], "chnroute6", (function(t) {
                 return converters.extractCHNRoute(t, "chnroute6");
             }));
@@ -99,7 +99,7 @@ return L.view.extend({
     },
     render: function(t) {
         void 0 === t && (t = []);
-        var e, r = new form.Map("v2ray", "%s - %s".format(_("V2Ray"), _("Transparent Proxy"))), i = r.section(form.NamedSection, "main_transparent_proxy", "transparent_proxy");
+        var e, r = new form.Map("luci_v2ray", "%s - %s".format(_("V2Ray"), _("Transparent Proxy"))), i = r.section(form.NamedSection, "main_transparent_proxy", "transparent_proxy");
         (e = i.option(form.Value, "redirect_port", _("Redirect port"), _("Enable transparent proxy on Dokodemo-door port."))).value("", _("None"));
         for (var a = 0, o = t; a < o.length; a++) {
             var s = o[a];
@@ -122,11 +122,11 @@ return L.view.extend({
         (e = i.option(custom.ListStatusValue, "_gfwlist", _("GFWList"))).listtype = "gfwlist", 
         e.btntitle = _("Update"), e.btnstyle = "apply", e.onupdate = L.bind(this.handleListUpdate, this), 
         (e = i.option(custom.TextValue, "_proxy_list", _("Extra proxy list"), _("One address per line. Allow types: DOMAIN, IP, CIDR. eg: %s, %s, %s").format("www.google.com", "1.1.1.1", "192.168.0.0/16"))).wrap = "off", 
-        e.rows = 5, e.datatype = "string", e.filepath = "/etc/v2ray/proxylist.txt", (e = i.option(custom.TextValue, "_direct_list", _("Extra direct list"), _("One address per line. Allow types: DOMAIN, IP, CIDR. eg: %s, %s, %s").format("www.google.com", "1.1.1.1", "192.168.0.0/16"))).wrap = "off", 
-        e.rows = 5, e.datatype = "string", e.filepath = "/etc/v2ray/directlist.txt", e = i.option(form.Value, "proxy_list_dns", _("Proxy list DNS"), _("DNS used for domains in proxy list, format: <code>ip#port</code>. eg: %s").format("1.1.1.1#53")), 
+        e.rows = 5, e.datatype = "string", e.filepath = "/etc/luci_v2ray/proxylist.txt", (e = i.option(custom.TextValue, "_direct_list", _("Extra direct list"), _("One address per line. Allow types: DOMAIN, IP, CIDR. eg: %s, %s, %s").format("www.google.com", "1.1.1.1", "192.168.0.0/16"))).wrap = "off", 
+        e.rows = 5, e.datatype = "string", e.filepath = "/etc/luci_v2ray/directlist.txt", e = i.option(form.Value, "proxy_list_dns", _("Proxy list DNS"), _("DNS used for domains in proxy list, format: <code>ip#port</code>. eg: %s").format("1.1.1.1#53")), 
         e = i.option(form.Value, "direct_list_dns", _("Direct list DNS"), _("DNS used for domains in direct list, format: <code>ip#port</code>. eg: %s").format("114.114.114.114#53")), 
         (e = i.option(custom.TextValue, "_src_direct_list", _("Local devices direct outbound list"), _("One address per line. Allow types: IP, CIDR. eg: %s, %s").format("192.168.0.19", "192.168.0.0/16"))).wrap = "off", 
-        e.rows = 3, e.datatype = "string", e.filepath = "/etc/v2ray/srcdirectlist.txt", 
+        e.rows = 3, e.datatype = "string", e.filepath = "/etc/luci_v2ray/srcdirectlist.txt", 
         r.render();
     }
 });
