@@ -183,10 +183,18 @@ jobs:
 
         find "${{ github.workspace }}" -type f -name "*.ipk" -exec ls -lh {} \;
 
-    - name: Release and Upload Assets
-      uses: softprops/action-gh-release@v1
+    - name: Create release
+      id: create-new-release
+      uses: actions/create-release@v1
       with:
         files: '*.ipk'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload asset
+      uses: actions/upload-release-asset@v1
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create-new-release.outputs.upload_url}}
+        files: '*.ipk'
 
