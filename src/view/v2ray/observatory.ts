@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2020 Xingwang Liao <kuoruan@gmail.com>
+ * Copyright 2021 BI7PRK
  *
  * Licensed to the public under the MIT License.
  */
@@ -10,10 +10,8 @@
 "require form";
 "require uci";
 "require v2ray";
-// "require view";
-
 // @ts-ignore
-return L.view.extend<SectionItem[][]>({
+return L.view.extend({
   render: function () {
     const m = new form.Map(
       "v2ray",
@@ -23,18 +21,18 @@ return L.view.extend<SectionItem[][]>({
       )
     );
 
-    const s1 = m.section(form.NamedSection, "main_observatory", "observatory");
-    s1.addremove = false;
+    const s = m.section(form.NamedSection, "main_observatory", "observatory");
+    s.addremove = false;
 
     let o;
-    o = s1.option(form.Flag, "enabled", _("Enabled"));
+    o = s.option(form.Flag, "enabled", _("Enabled"));
     o.rmempty = false;
 
-    o = s1.option(form.Value, "probeURL", _("ProbeURL"));
+    o = s.option(form.Value, "probeURL", _("ProbeURL"));
 
-    o = s1.option(form.Value, "probeInterval", _("ProbeInterval"));
+    o = s.option(form.Value, "probeInterval", _("ProbeInterval"));
 
-    o = s1.option(form.DynamicList, "subjectSelector", _("SubjectSelector"));
+    o = s.option(form.DynamicList, "subjectSelector", _("SubjectSelector"));
 
     return m.render();
   },
