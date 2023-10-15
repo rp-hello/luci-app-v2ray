@@ -597,7 +597,7 @@ add_v2ray_tproxy_rules() {
 
 	# https://www.kernel.org/doc/Documentation/networking/tproxy.txt
 
-	ip rule add fwmark 1 lookup 100
+	ip rule add fwmark 0x1/0x1 lookup 100
 	ip route add local 0.0.0.0/0 dev lo table 100 2>/dev/null
 
 	cat <<-EOF >/tmp/tproxy_iptables.txt
