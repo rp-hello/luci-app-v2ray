@@ -306,6 +306,7 @@ inbound_section_validate() {
 		'ss_sockopt_tproxy:or("redirect", "tproxy", "off")' \
 		'tag:string' \
 		'sniffing_enabled:bool:0' \
+		'routeOnly_enabled:bool:0' \
 		'sniffing_dest_override:list(or("http", "tls"))' \
 		'allocate_strategy:or("always", "random")' \
 		'allocate_refresh:uinteger' \
@@ -1498,6 +1499,8 @@ add_inbound_setting() {
 	json_add_object "sniffing"
 
 	json_add_boolean "enabled" "$sniffing_enabled"
+
+	json_add_boolean "redonly" "$redonly_enabled"
 
 	if [ -n "$sniffing_dest_override" ] ; then
 		json_add_array "destOverride"

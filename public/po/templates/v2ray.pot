@@ -1015,6 +1015,10 @@ msgstr ""
 msgid "Sniffing"
 msgstr ""
 
+#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:384
+msgid "routeOnly"
+msgstr ""
+
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:369
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:374
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:495

@@ -1015,6 +1015,10 @@ msgstr "使用 TProxy 来设置转发规则。"
 msgid "Sniffing"
 msgstr "流量探测"
 
+#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:384
+msgid "routeOnly"
+msgstr "仅作用于路由"
+
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:369
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:374
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:495

@@ -957,6 +957,14 @@ return L.view.extend<string[]>({
 
     o = s.taboption(
       "other",
+      form.Flag,
+      "routeOnly_enabled",
+      "%s - %s".format(_("routeOnly"), _("Enabled"))
+    );
+    o.modalonly = true;
+
+    o = s.taboption(
+      "other",
       form.MultiValue,
       "sniffing_dest_override",
       "%s - %s".format(_("Sniffing"), _("Dest override"))
