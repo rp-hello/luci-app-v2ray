@@ -8,8 +8,6 @@
 "use strict";
 
 "require form";
-"require uci";
-"require v2ray";
 // @ts-ignore
 return L.view.extend({
   render: function () {
