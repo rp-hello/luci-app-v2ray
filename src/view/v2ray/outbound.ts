@@ -722,6 +722,35 @@ return L.view.extend<string[]>({
     o.value("xtls-rprx-vision-udp443");
     o.depends("ss_security", "tls");
 
+    // TLS Version
+    o = s.taboption(
+      "stream",
+      form.ListValue,
+      "min_tls_version",
+      _("min TLS version")
+    );
+    o.modalonly = true;
+    o.value("", _("Default"));
+    o.value("1.0");
+    o.value("1.1");
+    o.value("1.2");
+    o.value("1.3");
+    o.depends("ss_security", "tls");
+
+    o = s.taboption(
+      "stream",
+      form.ListValue,
+      "max_tls_version",
+      _("max TLS version")
+    );
+    o.modalonly = true;
+    o.value("", _("Default"));
+    o.value("1.0");
+    o.value("1.1");
+    o.value("1.2");
+    o.value("1.3");
+    o.depends("ss_security", "tls");
+
     // Stream Settings - TLS
     o = s.taboption(
       "stream",

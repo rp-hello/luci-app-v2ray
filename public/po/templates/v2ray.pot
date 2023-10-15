@@ -386,6 +386,14 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:157
+msgid "min TLS version"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:158
+msgid "max TLS version"
+msgstr ""
+
 #: package/htdocs/luci-static/resources/view/v2ray/routing.js:51
 msgid "Domain"
 msgstr ""
