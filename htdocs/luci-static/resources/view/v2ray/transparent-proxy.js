@@ -40,93 +40,305 @@ var gfwlistUrls = {
 
 // @ts-ignore
 return L.view.extend({
-    handleListUpdate: function(t, e, r) {
-        var i = function() {
-            ui.hideModal(), window.location.reload();
-        }, a = function(t, e, r) {
-            L.Request.request(L.url("admin/services/v2ray/request"), {
-                method: "post",
-                timeout: 6e4,
-                query: {
-                    url: t,
-                    token: L.env.token,
-                    sessionid: L.env.sessionid
-                }
-            }).then((function(t) {
-                var a;
-                if (200 === t.status && (a = t.json())) {
-                    var o = void 0;
-                    if (!a.code && (o = a.content)) {
-                        var s = r(o);
-                        s ? function(t, e) {
-                            fs.write("/etc/luci_v2ray/" + t + ".txt", e).then((function() {
-                                ui.showModal(_("List Update"), [ E("p", _("%d list updated.").format(t)), E("div", {
-                                    class: "right"
-                                }, E("button", {
-                                    class: "btn",
-                                    click: i
-                                }, _("OK"))) ]);
-                            })).catch((function(e) {
-                                L.raise("Error", t + ".txt =>> " + e.message);
-                            }));
-                        }(e, s) : L.raise("Error", _("Failed to decode data."));
-                    } else L.raise("Error", a.message || _("Failed to fetch data."));
-                } else L.raise("Error", t.statusText);
-            })).catch((function(t) {
-                ui.addNotification(null, E("p", t.message));
-            }));
+    handleListUpdate(ev, section_id, listtype) {
+        const hideModal = function () {
+            ui.hideModal();
+
+            window.location.reload();
         };
-        switch (r) {
-          case "gfwlist":
-            var o = uci.get("luci_v2ray", e, "gfwlist_mirror") || "github";
-            return a(gfwlistUrls[o], "gfwlist", (function(t) {
-                return converters.extractGFWList(t);
-            }));
 
-          case "chnroute":
-          case "chnroute6":
-            var s = uci.get("luci_v2ray", e, "apnic_delegated_mirror") || "apnic";
-            return a(apnicDelegatedUrls[s], "chnroute6", (function(t) {
-                return converters.extractCHNRoute(t, "chnroute6");
-            }));
+        switch (listtype) {
+            case "gfwlist": {
+                const gfwlistMirror =
+                    uci.get("v2ray", section_id, "gfwlist_mirror") || "github";
+                const url = gfwlistUrls[gfwlistMirror];
 
-          default:
-            ui.addNotification(null, _("Unexpected error."));
+                return L.Request.request(L.url("admin/services/v2ray/request"), {
+                    method: "post",
+                    timeout: 50 * 1000,
+                    query: {
+                        url: url,
+                        token: L.env.token,
+                        sessionid: L.env.sessionid,
+                    },
+                })
+                    .then(function (res) {
+                        let data;
+                        if (res.status === 200 && (data = res.json())) {
+                            let content;
+                            if (!data.code && (content = data.content)) {
+                                const gfwlistDomains = converters.extractGFWList(content);
+                                if (gfwlistDomains) {
+                                    fs.write("/etc/v2ray/gfwlist.txt", gfwlistDomains)
+                                        .then(function () {
+                                            ui.showModal(_("List Update"), [
+                                                E("p", _("GFWList updated.")),
+                                                E(
+                                                    "div",
+                                                    { class: "right" },
+                                                    E(
+                                                        "button",
+                                                        {
+                                                            class: "btn",
+                                                            click: hideModal,
+                                                        },
+                                                        _("OK")
+                                                    )
+                                                ),
+                                            ]);
+                                        })
+                                        .catch(L.raise);
+                                } else {
+                                    L.raise("Error", _("Failed to decode GFWList."));
+                                }
+                            } else {
+                                L.raise("Error", data.message || _("Failed to fetch GFWList."));
+                            }
+                        } else {
+                            L.raise("Error", res.statusText);
+                        }
+                    })
+                    .catch(function (e) {
+                        ui.addNotification(null, E("p", e.message));
+                    });
+            }
+            case "chnroute":
+            case "chnroute6": {
+                const delegatedMirror =
+                    uci.get("v2ray", section_id, "apnic_delegated_mirror") || "apnic";
+
+                const url = apnicDelegatedUrls[delegatedMirror];
+
+                return L.Request.request(L.url("admin/services/v2ray/request"), {
+                    method: "post",
+                    timeout: 50 * 1000,
+                    query: {
+                        url: url,
+                        token: L.env.token,
+                        sessionid: L.env.sessionid,
+                    },
+                })
+                    .then(function (res) {
+                        let data;
+                        if (res.status === 200 && (data = res.json())) {
+                            let content;
+                            if ((content = data.content)) {
+                                const ipList = converters.extractCHNRoute(
+                                    content,
+                                    listtype === "chnroute6"
+                                );
+
+                                fs.write(`/etc/v2ray/${listtype}.txt`, ipList)
+                                    .then(function () {
+                                        ui.showModal(_("List Update"), [
+                                            E("p", _("CHNRoute list updated.")),
+                                            E(
+                                                "div",
+                                                { class: "right" },
+                                                E(
+                                                    "button",
+                                                    {
+                                                        class: "btn",
+                                                        click: hideModal,
+                                                    },
+                                                    _("OK")
+                                                )
+                                            ),
+                                        ]);
+                                    })
+                                    .catch(L.raise);
+                            } else {
+                                L.raise(
+                                    "Error",
+                                    data.message || _("Failed to fetch CHNRoute list.")
+                                );
+                            }
+                        } else {
+                            L.raise("Error", res.statusText);
+                        }
+                    })
+                    .catch(function (e) {
+                        ui.addNotification(null, E("p", e.message));
+                    });
+            }
+
+            default: {
+                ui.addNotification(null, _("Unexpected error."));
+            }
         }
     },
-    load: function() {
+    load: function () {
         return v2ray.getDokodemoDoorPorts();
     },
-    render: function(t) {
-        void 0 === t && (t = []);
-        var e, r = new form.Map("luci_v2ray", "%s - %s".format(_("V2Ray"), _("Transparent Proxy"))), i = r.section(form.NamedSection, "main_transparent_proxy", "transparent_proxy");
-        (e = i.option(form.Value, "redirect_port", _("Redirect port"), _("Enable transparent proxy on Dokodemo-door port."))).value("", _("None"));
-        for (var a = 0, o = t; a < o.length; a++) {
-            var s = o[a];
-            e.value(s.value, s.caption);
+    render: function (dokodemoDoorPorts) {
+        void 0 === dokodemoDoorPorts && (dokodemoDoorPorts = []);
+        const m = new form.Map(
+            "luci_v2ray",
+            "%s - %s".format(_("V2Ray"), _("Transparent Proxy"))
+        );
+
+        const s = m.section(
+            form.NamedSection,
+            "main_transparent_proxy",
+            "transparent_proxy"
+        );
+
+        let o;
+
+        o = s.option(
+            form.Value,
+            "redirect_port",
+            _("Redirect port"),
+            _("Enable transparent proxy on Dokodemo-door port.")
+        );
+        o.value("", _("None"));
+        for (const p of dokodemoDoorPorts) {
+            o.value(p.value, p.caption);
         }
-        return e.datatype = "port", (e = i.option(widgets.NetworkSelect, "lan_ifaces", _("LAN interfaces"), _("Enable proxy on selected interfaces."))).multiple = !0, 
-        e.nocreate = !0, e.filter = function(t, e) {
-            return e.indexOf("wan") < 0;
-        }, e.rmempty = !1, e = i.option(form.Flag, "use_tproxy", _("Use TProxy"), _("Setup redirect rules with TProxy.")), 
-        e = i.option(form.Flag, "only_privileged_ports", _("Only privileged ports"), _("Only redirect traffic on ports below 1024.")), 
-        e = i.option(form.Flag, "redirect_udp", _("Redirect UDP"), _("Redirect UDP traffic to V2Ray.")), 
-        (e = i.option(form.Flag, "redirect_dns", _("Redirect DNS"), _("Redirect DNS traffic to V2Ray."))).depends("redirect_udp", ""), 
-        e.depends("redirect_udp", "0"), (e = i.option(form.ListValue, "proxy_mode", _("Proxy mode"), _("If enabled, iptables rules will be added to pre-filter traffic and then sent to V2Ray."))).value("default", _("Default")), 
-        e.value("cn_direct", _("CN Direct")), e.value("cn_proxy", _("CN Proxy")), e.value("gfwlist_proxy", _("GFWList Proxy")), 
-        (e = i.option(form.ListValue, "apnic_delegated_mirror", _("APNIC delegated mirror"))).value("apnic", "APNIC"), 
-        e.value("arin", "ARIN"), e.value("ripe", "RIPE"), e.value("iana", "IANA"), (e = i.option(custom.ListStatusValue, "_chnroutelist", _("CHNRoute"))).listtype = "chnroute", 
-        e.btntitle = _("Update"), e.btnstyle = "apply", e.onupdate = L.bind(this.handleListUpdate, this), 
-        (e = i.option(form.ListValue, "gfwlist_mirror", _("GFWList mirror"))).value("github", "GitHub"), 
-        e.value("gitlab", "GitLab"), e.value("bitbucket", "Bitbucket"), e.value("pagure", "Pagure"), 
-        (e = i.option(custom.ListStatusValue, "_gfwlist", _("GFWList"))).listtype = "gfwlist", 
-        e.btntitle = _("Update"), e.btnstyle = "apply", e.onupdate = L.bind(this.handleListUpdate, this), 
-        (e = i.option(custom.TextValue, "_proxy_list", _("Extra proxy list"), _("One address per line. Allow types: DOMAIN, IP, CIDR. eg: %s, %s, %s").format("www.google.com", "1.1.1.1", "192.168.0.0/16"))).wrap = "off", 
-        e.rows = 5, e.datatype = "string", e.filepath = "/etc/luci_v2ray/proxylist.txt", (e = i.option(custom.TextValue, "_direct_list", _("Extra direct list"), _("One address per line. Allow types: DOMAIN, IP, CIDR. eg: %s, %s, %s").format("www.google.com", "1.1.1.1", "192.168.0.0/16"))).wrap = "off", 
-        e.rows = 5, e.datatype = "string", e.filepath = "/etc/luci_v2ray/directlist.txt", e = i.option(form.Value, "proxy_list_dns", _("Proxy list DNS"), _("DNS used for domains in proxy list, format: <code>ip#port</code>. eg: %s").format("1.1.1.1#53")), 
-        e = i.option(form.Value, "direct_list_dns", _("Direct list DNS"), _("DNS used for domains in direct list, format: <code>ip#port</code>. eg: %s").format("114.114.114.114#53")), 
-        (e = i.option(custom.TextValue, "_src_direct_list", _("Local devices direct outbound list"), _("One address per line. Allow types: IP, CIDR. eg: %s, %s").format("192.168.0.19", "192.168.0.0/16"))).wrap = "off", 
-        e.rows = 3, e.datatype = "string", e.filepath = "/etc/luci_v2ray/srcdirectlist.txt", 
-        r.render();
+        o.datatype = "port";
+
+        o = s.option(
+            widgets.NetworkSelect,
+            "lan_ifaces",
+            _("LAN interfaces"),
+            _("Enable proxy on selected interfaces.")
+        );
+        o.multiple = true;
+        o.nocreate = true;
+        o.filter = function (section_id, value) {
+            return value.indexOf("wan") < 0;
+        };
+        o.rmempty = false;
+
+        o = s.option(
+            form.Flag,
+            "use_tproxy",
+            _("Use TProxy"),
+            _("Setup redirect rules with TProxy.")
+        );
+
+        o = s.option(
+            form.Flag,
+            "only_privileged_ports",
+            _("Only privileged ports"),
+            _("Only redirect traffic on ports below 1024.")
+        );
+
+        o = s.option(
+            form.Flag,
+            "redirect_udp",
+            _("Redirect UDP"),
+            _("Redirect UDP traffic to V2Ray.")
+        );
+
+        o = s.option(
+            form.Flag,
+            "redirect_dns",
+            _("Redirect DNS"),
+            _("Redirect DNS traffic to V2Ray.")
+        );
+        o.depends("redirect_udp", "");
+        o.depends("redirect_udp", "0");
+
+        o = s.option(
+            form.ListValue,
+            "proxy_mode",
+            _("Proxy mode"),
+            _(
+                "If enabled, iptables rules will be added to pre-filter traffic and then sent to V2Ray."
+            )
+        );
+        o.value("default", _("Default"));
+        o.value("cn_direct", _("CN Direct"));
+        o.value("cn_proxy", _("CN Proxy"));
+        o.value("gfwlist_proxy", _("GFWList Proxy"));
+
+        o = s.option(
+            form.ListValue,
+            "apnic_delegated_mirror",
+            _("APNIC delegated mirror")
+        );
+        o.value("apnic", "APNIC");
+        o.value("arin", "ARIN");
+        o.value("ripe", "RIPE");
+        o.value("iana", "IANA");
+
+        o = s.option(custom.ListStatusValue, "_chnroutelist", _("CHNRoute"));
+        o.listtype = "chnroute";
+        o.btntitle = _("Update");
+        o.btnstyle = "apply";
+        o.onupdate = L.bind(this.handleListUpdate, this);
+
+        o = s.option(form.ListValue, "gfwlist_mirror", _("GFWList mirror"));
+        o.value("github", "GitHub");
+        o.value("gitlab", "GitLab");
+        o.value("bitbucket", "Bitbucket");
+        o.value("pagure", "Pagure");
+
+        o = s.option(custom.ListStatusValue, "_gfwlist", _("GFWList"));
+        o.listtype = "gfwlist";
+        o.btntitle = _("Update");
+        o.btnstyle = "apply";
+        o.onupdate = L.bind(this.handleListUpdate, this);
+
+        o = s.option(
+            custom.TextValue,
+            "_proxy_list",
+            _("Extra proxy list"),
+            _(
+                "One address per line. Allow types: DOMAIN, IP, CIDR. eg: %s, %s, %s"
+            ).format("www.google.com", "1.1.1.1", "192.168.0.0/16")
+        );
+        o.wrap = "off";
+        o.rows = 5;
+        o.datatype = "string";
+        o.filepath = "/etc/luci_v2ray/proxylist.txt";
+
+        o = s.option(
+            custom.TextValue,
+            "_direct_list",
+            _("Extra direct list"),
+            _(
+                "One address per line. Allow types: DOMAIN, IP, CIDR. eg: %s, %s, %s"
+            ).format("www.google.com", "1.1.1.1", "192.168.0.0/16")
+        );
+        o.wrap = "off";
+        o.rows = 5;
+        o.datatype = "string";
+        o.filepath = "/etc/luci_v2ray/directlist.txt";
+
+        o = s.option(
+            form.Value,
+            "proxy_list_dns",
+            _("Proxy list DNS"),
+            _(
+                "DNS used for domains in proxy list, format: <code>ip#port</code>. eg: %s"
+            ).format("1.1.1.1#53")
+        );
+
+        o = s.option(
+            form.Value,
+            "direct_list_dns",
+            _("Direct list DNS"),
+            _(
+                "DNS used for domains in direct list, format: <code>ip#port</code>. eg: %s"
+            ).format("114.114.114.114#53")
+        );
+
+        o = s.option(
+            custom.TextValue,
+            "_src_direct_list",
+            _("Local devices direct outbound list"),
+            _("One address per line. Allow types: IP, CIDR. eg: %s, %s").format(
+                "192.168.0.19",
+                "192.168.0.0/16"
+            )
+        );
+        o.wrap = "off";
+        o.rows = 3;
+        o.datatype = "string";
+        o.filepath = "/etc/luci_v2ray/srcdirectlist.txt";
+
+        return m.render();
     }
 });
