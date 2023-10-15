@@ -30,7 +30,7 @@ return view.extend({
         return E([
             E("h2", "%s - %s".format(_("V2Ray"), _("About"))),
             E("p", _("LuCI support for V2Ray.")),
-            E("p", _("Version: %s").format("2.2.1" + "-" + "0")),
+            E("p", _("Version: %s").format("2.2.2" + "-" + "0")),
             E("p", _("Author: %s").format("Xingwang Liao & BI7PRK")),
             E("p", _("Source: %s").format('<a href="https://github.com/BI7PRK/luci-app-v2ray" target="_blank">https://github.com/BI7PRK/luci-app-v2ray</a>')),
             E("p", _("Latest: %s").format('<a href="https://github.com/BI7PRK/luci-app-v2ray/releases/latest" target="_blank">https://github.com/BI7PRK/luci-app-v2ray/releases/latest</a>')),
