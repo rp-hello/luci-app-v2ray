@@ -2595,7 +2595,7 @@ start_instance() {
 	procd_set_param respawn
 
 	if [ -n "$asset_location" ] && [ -d "$asset_location" ]; then
-		procd_set_param env V2RAY_LOCATION_ASSET="$asset_location"
+		procd_append_param env V2RAY_LOCATION_ASSET="$asset_location"
 	fi
 
 	# cat /proc/PID/limits to see if limits works
@@ -2606,7 +2606,7 @@ start_instance() {
 		local mem_total="$(awk '/MemTotal/ {print $2}' /proc/meminfo)"
 		if [ -n "$mem_total" ]; then
 			local use_mem_in_kib="$(expr $mem_total \* $mem_percentage \/ 100)"
-			procd_set_param env GOMEMLIMIT="${use_mem_in_kib}KiB"
+			procd_append_param env GOMEMLIMIT="${use_mem_in_kib}KiB"
 		fi
 	fi
 
