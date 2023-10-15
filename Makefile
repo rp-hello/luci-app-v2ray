@@ -16,7 +16,7 @@ PKG_BUILD_DEPENDS:=luci-base/host
 
 LUCI_TITLE:=LuCI support for v2ray
 LUCI_DEPENDS:=+jshn +ip +ipset +iptables +iptables-mod-tproxy +iptables-mod-socket +ip6tables-nft \
-	+resolveip +dnsmasq-full
+	+resolveip +dnsmasq-full +lua
 LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/conffiles
