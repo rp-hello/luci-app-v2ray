@@ -145,6 +145,7 @@ v2ray_section_validate() {
 		'loglevel:or("debug", "info", "warning", "error", "none")' \
 		'access_log:string' \
 		'error_log:string' \
+		'dnsLog:bool:0' \
 		'stats_enabled:bool:0' \
 		'transport_enabled:bool:0' \
 		'inbounds:list(uci("v2ray", "@inbound"))' \
@@ -2338,6 +2339,10 @@ start_instance() {
 		if [ -n "$loglevel" ] && [ "$loglevel" != "none" ]; then
 			json_add_string "loglevel" "$loglevel"
 			json_add_string "error" "$error_log"
+		fi
+
+		if [ "x$dnsLog" = "x1" ]; then
+			json_add_boolean "dnsLog" "$dnsLog"
 		fi
 
 		json_close_object # log

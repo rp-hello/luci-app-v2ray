@@ -142,6 +142,8 @@ return L.view.extend<SectionItem[][]>({
     o.depends("loglevel", "warning");
     o.depends("loglevel", "error");
 
+    o = s.option(form.Flag, "dnsLog", _("Enabled"));
+
     o = s.option(form.MultiValue, "inbounds", _("Inbounds enabled"));
     o.depends("config_file", "");
     for (const s of inboundSections) {
