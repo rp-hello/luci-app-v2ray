@@ -9,6 +9,11 @@ msgstr ""
 msgid "<code>transport</code> field in top level configuration, JSON string"
 msgstr ""
 
+#: package/htdocs/luci-static/resources/view/v2ray/main.js:96
+msgid "Enabled DSN log"
+msgstr ""
+
+
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:398
 msgid "Version"
 msgstr ""
