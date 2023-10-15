@@ -1,9 +1,9 @@
-name: OpenWrt Build
+name: Build and Release
 
 on:
   push:
-    branches:
-      "*"
+    tags:
+      - "*"
 
 env:
   PACKAGE_NAME: luci-app-v2ray
@@ -41,3 +41,13 @@ jobs:
         with:
           name: luci-app-v2ray-all-packages
           path: bin/packages/${{ matrix.arch }}/action/*.ipk
+
+      - name: Release and Upload Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "bin/packages/${{ matrix.arch }}/action/*.ipk"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+permissions: 
+  contents: write
