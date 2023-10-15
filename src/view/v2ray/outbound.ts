@@ -232,9 +232,12 @@ return L.view.extend<string[]>({
     ]);
   },
   load: function () {
-    return v2ray.getLocalIPs();
+    return Promise.all([
+      v2ray.getLocalIPs(),
+      //v2ray.getSections("inbound", "tag"),
+    ]);
   },
-  render: function (localIPs: string[] = []) {
+  render: function ([localIPs = []]) {
     const m = new form.Map(
       "v2ray",
       "%s - %s".format(_("V2Ray"), _("Outbound"))
@@ -267,6 +270,7 @@ return L.view.extend<string[]>({
     }
 
     o = s.taboption("general", form.ListValue, "protocol", _("Protocol"));
+    o.modalonly = true;
     o.value("blackhole", "Blackhole");
     o.value("dns", "DNS");
     o.value("freedom", "Freedom");
@@ -274,8 +278,10 @@ return L.view.extend<string[]>({
     o.value("mtproto", "MTProto");
     o.value("shadowsocks", "Shadowsocks");
     o.value("socks", "Socks");
+    o.value("trojan", "Trojan");
     o.value("vmess", "VMess");
-    o.value("vless", "VLESS");  //Add VLESS Protocol support
+    o.value("vless", "VLESS"); // Add VLESS Protocol support
+    o.value("loopback", "Loopback"); // Add Loopback Protocol support
 
     // Settings Blackhole
     o = s.taboption(
@@ -523,6 +529,36 @@ return L.view.extend<string[]>({
     o.depends("protocol", "socks");
     o.datatype = "uinteger";
 
+    // Settings - Trojan
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_trojan_address",
+      "%s - %s".format("Trojan", _("Address"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "trojan");
+    o.datatype = "host";
+
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_trojan_port",
+      "%s - %s".format("Trojan", _("Port"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "trojan");
+    o.datatype = "port";
+
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_trojan_password",
+      "%s - %s".format("Trojan", _("Password"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "trojan");
+
     // Settings - VMess
     o = s.taboption(
       "general",
@@ -637,7 +673,20 @@ return L.view.extend<string[]>({
     o.depends("protocol", "vless");
     o.value("none", "none");
 
-    
+    // Settings Loopback
+
+    o = s.taboption(
+      "general",
+      form.Value,
+      "s_loopback_inboundtag",
+      "%s - %s".format("Loopback", _("Inbound tag"))
+    );
+    o.modalonly = true;
+    o.depends("protocol", "loopback");
+    // for (const s in inboundSections) {
+    //   o.value(s.caption, s.caption);
+    // }
+
     /** Stream Settings **/
     o = s.taboption("stream", form.ListValue, "ss_network", _("Network"));
     o.value("");
@@ -654,6 +703,24 @@ return L.view.extend<string[]>({
     o.value("none", _("None"));
     o.value("tls", "TLS");
 
+    // XTLS Flows
+    o = s.taboption(
+      "stream",
+      form.ListValue,
+      "s_xtls_flow",
+      _("XTLS Flow"),
+      _("Use XTLS mode in VLESS protocol")
+    );
+    o.modalonly = true;
+    o.value("none", _("None"));
+    o.value("xtls-rprx-direct");
+    o.value("xtls-rprx-direct-udp443");
+    o.value("xtls-rprx-origin");
+    o.value("xtls-rprx-origin-udp443");
+    o.value("xtls-rprx-splice");
+    o.value("xtls-rprx-splice-udp443");
+    o.depends("ss_security", "tls");
+
     // Stream Settings - TLS
     o = s.taboption(
       "stream",
@@ -666,7 +733,7 @@ return L.view.extend<string[]>({
 
     o = s.taboption(
       "stream",
-      form.Value,
+      form.DynamicList,
       "ss_tls_alpn",
       "%s - %s".format("TLS", "ALPN")
     );
