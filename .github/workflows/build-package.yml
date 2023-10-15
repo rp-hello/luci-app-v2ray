@@ -66,7 +66,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ${{ env.CACHE_DIR }}
-        key: openwrt-${{ env.PACKAGE_NAME }}-${{ GITHUB_OUTPUT }}
+        key: openwrt-${{ env.PACKAGE_NAME }}-${{ steps.cache_key.outputs.timestamp }}
         restore-keys: |
           openwrt-${{ env.PACKAGE_NAME }}-
 
