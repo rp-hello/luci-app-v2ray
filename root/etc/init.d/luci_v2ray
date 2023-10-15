@@ -673,7 +673,8 @@ add_v2ray_tproxy_rules() {
 			if [ -n "$addition" ] && [ -n "$lan_ipaddrs6" ]; then
 				local ipaddr
 				for ipaddr6 in $lan_ipaddrs6; do
-					echo "-A V2RAY -p udp --dport 53 -d $ipaddr6 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
+					echo "-A V2RAY -p udp --dport 53 -d $ipaddr6 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1/0x1"
+					echo "-A V2RAY -p tcp --dport 53 -d $ipaddr6 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1/0x1"
 				done
 			fi
 		)
