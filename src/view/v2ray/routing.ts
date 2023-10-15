@@ -142,6 +142,11 @@ return L.view.extend<SectionItem[][]>({
     o = s3.option(form.Value, "tag", _("Tag"));
     o.rmempty = false;
 
+    o = s3.option(form.ListValue, "strategy_type", _("StrategyType"));
+    o.value("random");
+    o.value("leastPing");
+    o.modalonly = true;
+
     o = s3.option(form.DynamicList, "selector", _("Selector"));
 
     return m.render();
