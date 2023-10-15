@@ -20,7 +20,7 @@
 // @ts-ignore
 return L.view.extend({
     handleServiceReload: function(e) {
-        return fs.exec("/etc/init.d/v2ray", [ "reload" ]).then(L.bind((function(e, o) {
+        return fs.exec("/etc/init.d/luci_v2ray", [ "reload" ]).then(L.bind((function(e, o) {
             0 !== o.code && (ui.addNotification(null, [ E("p", _("Reload service failed with code %d").format(o.code)), o.stderr ? E("pre", {}, [ o.stderr ]) : "" ]), 
             L.raise("Error", "Reload failed"));
         }), this, e.target)).catch((function(e) {
