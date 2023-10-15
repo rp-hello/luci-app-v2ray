@@ -44,7 +44,6 @@ return L.view.extend<SectionItem[]>({
       "disable_fallback_if_match",
       _("Disable Fallback If Match")
     );
-  
     o = s1.option(
       form.Value,
       "client_ip",
