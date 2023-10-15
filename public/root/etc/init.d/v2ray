@@ -777,11 +777,18 @@ add_dns_settings() {
 		local h
 		for h in $hosts; do
 			local domain="$(echo "$h" | cut -d'|' -f1)"
-			local ip="$(echo "$h" | cut -d'|' -f2)"
-
-			if [ -n "$domain" ] && [ -n "$ip" ]; then
-				json_add_string "$domain" "$ip"
+			local ip_arr
+			local OLD_IFS="$IFS"
+			IFS="," ip_arr="$(echo "$h" | cut -d'|' -f2)"
+			if [ -n "$domain" ] && [ -n "$ip_arr" ] ; then
+				json_add_array "$domain" 
+				local ip
+				for ip in $ip_arr ; do
+					json_add_string "" "$ip"
+				done
+				json_close_array
 			fi
+			IFS="$OLD_IFS"
 		done
 
 		json_close_object # hosts
