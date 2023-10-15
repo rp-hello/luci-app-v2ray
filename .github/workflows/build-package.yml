@@ -60,7 +60,7 @@ jobs:
 
     - name: Prepare Cache Key
       id: cache_key
-      run: echo "::set-output name=timestamp::$(date +"%s")"
+      run: echo "timestamp=$(date +"%s")" >> $GITHUB_OUTPUT
 
     - name: Setup OpenWrt Cache
       uses: actions/cache@v1
