@@ -283,11 +283,8 @@ inbound_section_validate() {
 		's_vmess_disable_insecure_encryption:bool:0' \
 		'ss_network:or("tcp", "kcp", "ws", "http", "domainsocket", "quic")' \
 		'ss_security:or("none", "tls")' \
-		's_xtls_flow:or("none", "xtls-rprx-direct", "xtls-rprx-direct-udp443", "xtls-rprx-origin", "xtls-rprx-origin-udp443", "xtls-rprx-splice", "xtls-rprx-splice-udp443", "xtls-rprx-vision", "xtls-rprx-vision-udp443")' \
-		'min_tls_version:or("", "1.0", "1.1", "1.2", "1.3")' \
-		'max_tls_version:or("", "1.0", "1.1", "1.2", "1.3")' \
 		'ss_tls_server_name:host' \
-		'ss_tls_alpn:list(string)' \
+		'ss_tls_alpn:string' \
 		'u_tls:or("", "chrome", "firefox", "safari", "randomized")' \
 		'ss_tls_rejectUnknownSni:bool:0' \
 		'ss_tls_allow_insecure:bool:0' \
@@ -377,10 +374,6 @@ outbound_section_validate() {
 		's_vless_user_level:uinteger' \
 		'ss_network:or("tcp", "kcp", "ws", "http", "domainsocket", "quic", "grpc")' \
 		'ss_security:or("none", "tls")' \
-		'ss_xtls_enabled:bool:0' \
-		's_xtls_flow:or("none", "xtls-rprx-direct", "xtls-rprx-direct-udp443", "xtls-rprx-origin", "xtls-rprx-origin-udp443", "xtls-rprx-splice", "xtls-rprx-splice-udp443", "xtls-rprx-vision", "xtls-rprx-vision-udp443")' \
-		'min_tls_version:or("", "1.0", "1.1", "1.2", "1.3")' \
-		'max_tls_version:or("", "1.0", "1.1", "1.2", "1.3")' \
 		'ss_tls_server_name:host' \
 		'ss_tls_alpn:list(string)' \
 		'u_tls:or("", "chrome", "firefox", "safari", "randomized")' \
@@ -1333,22 +1326,12 @@ add_inbound_setting() {
 	test -n "$ss_network" &&
 		json_add_string "network" "$ss_network"
 
+	test -n "$ss_security" && \
+		json_add_string "security" "$ss_security"
+
 	if [ "$ss_security" = "tls" ]; then
 		json_add_object "tlsSettings"
-		if [ "$s_xtls_flow" != "none" ] && [ "${s_xtls_flow:10:6}" != "vision" ]; then
-			json_add_string "security" "xtls"
-			json_add_object "xtlsSettings"
 
-		else
-			json_add_string "security" "$ss_security"
-			json_add_object "tlsSettings"
-		fi
-		if [ "$min_tls_version" != "" ]; then
-			json_add_string "minVersion" "$min_tls_version"
-		fi
-		if [ "$max_tls_version" != "" ]; then
-			json_add_string "maxVersion" "$max_tls_version"
-		fi
 		test -n "$ss_tls_server_name" &&
 			json_add_string "serverName" "$ss_tls_server_name"
 
@@ -1847,24 +1830,12 @@ add_outbound_setting() {
 	test -n "$ss_network" &&
 		json_add_string "network" "$ss_network"
 
-	#test -n "$ss_security" && \
+	test -n "$ss_security" && \
+		json_add_string "security" "$ss_security"
+
 	case "${ss_security:-x}" in
 	"tls")
-		if [ "$ss_security" = "tls" ] && [ "$s_xtls_flow" != "none" ] && [ "${s_xtls_flow:10:6}" != "vision" ]; then
-			json_add_string "security" "xtls"
-			json_add_object "xtlsSettings"
-
-		else
-			json_add_string "security" "$ss_security"
-			json_add_object "tlsSettings"
-		fi
-
-		if [ "$min_tls_version" != "" ]; then
-			json_add_string "minVersion" "$min_tls_version"
-		fi
-		if [ "$max_tls_version" != "" ]; then
-			json_add_string "maxVersion" "$max_tls_version"
-		fi
+		json_add_object "tlsSettings"
 
 		test -n "$ss_tls_server_name" &&
 			json_add_string "serverName" "$ss_tls_server_name"

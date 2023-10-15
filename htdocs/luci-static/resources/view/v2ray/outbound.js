@@ -27,17 +27,23 @@ return L.view.extend({
             if (r && (l = converters.vmessLinkToVmess(r)) && "2" === l.v) {
                 var n = uci.add("v2ray", "outbound");
                 if (n) {
-                    var d = l.add || "0.0.0.0", p = l.port || "0", m = l.tls || "", i = l.net || "", u = l.type || "", c = l.path || "", v = l.ps || "%s:%s".format(d, p);
-                    uci.set("v2ray", n, "alias", v), uci.set("v2ray", n, "protocol", "vmess"), uci.set("v2ray", n, "s_vmess_address", d), 
-                    uci.set("v2ray", n, "s_vmess_port", p), uci.set("v2ray", n, "s_vmess_user_id", l.id || ""), 
+                    const tls = l.tls || "";
+                    var d = l.add || "0.0.0.0", p = l.port || "0", i = l.net || "", u = l.type || "", c = l.path || "", v = l.ps || "%s:%s".format(d, p);
+
+                    uci.set("v2ray", n, "alias", v);
+                    uci.set("v2ray", n, "protocol", "vmess");
+                    uci.set("v2ray", n, "s_vmess_address", d);
+                    uci.set("v2ray", n, "s_vmess_port", p);
+                    uci.set("v2ray", n, "s_vmess_user_id", l.id || "");
                     // uci.set("v2ray", sid, "s_vmess_user_alter_id", vmess.aid || "");
-                    uci.set("v2ray", n, "ss_security", m);
+                    uci.set("v2ray", n, "ss_security", tls);
+
                     var f = [];
                     switch (l.host && (f = l.host.split(",")), i) {
                       case "tcp":
                         uci.set("v2ray", n, "ss_network", "tcp"), uci.set("v2ray", n, "ss_tcp_header_type", u), 
                         "http" === u && f.length > 0 && (uci.set("v2ray", n, "ss_tcp_header_request_headers", [ "Host=%s".format(f[0]) ]), 
-                        "tls" === m && uci.set("v2ray", n, "ss_tls_server_name", f[0]));
+                        "tls" === tls && uci.set("v2ray", n, "ss_tls_server_name", f[0]));
                         break;
 
                       case "kcp":
@@ -58,7 +64,7 @@ return L.view.extend({
                       case "quic":
                         uci.set("v2ray", n, "ss_network", "quic"), uci.set("v2ray", n, "ss_quic_header_type", u), 
                         uci.set("v2ray", n, "ss_quic_key", c), f.length > 0 && (uci.set("v2ray", n, "ss_quic_security", f[0]), 
-                        "tls" === m && uci.set("v2ray", n, "ss_tls_server_name", f[0]));
+                        "tls" === tls && uci.set("v2ray", n, "ss_tls_server_name", f[0]));
                         break;
 
                       default:
@@ -125,22 +131,43 @@ return L.view.extend({
             var d = n[l];
             s.value(d);
         }
-        (s = r.taboption("general", form.ListValue, "protocol", _("Protocol"))).value("blackhole", "Blackhole"), 
-        s.value("dns", "DNS"), s.value("freedom", "Freedom"), s.value("http", "HTTP/2"), 
-        s.value("mtproto", "MTProto"), s.value("shadowsocks", "Shadowsocks"), s.value("socks", "Socks"), 
-        s.value("trojan", "Trojan"), s.value("vmess", "VMess"), s.value("vless", "VLESS"), 
-        // Add VLESS Protocol support
-        s.value("loopback", "Loopback"), (// Add Loopback Protocol support
+
+        const protocol_val = r.taboption("general", form.ListValue, "protocol", _("Protocol"));
+        protocol_val.value("blackhole", "Blackhole");
+        protocol_val.value("dns", "DNS");
+        protocol_val.value("freedom", "Freedom");
+        protocol_val.value("http", "HTTP/2");
+        protocol_val.value("mtproto", "MTProto");
+        protocol_val.value("shadowsocks", "Shadowsocks");
+        protocol_val.value("socks", "Socks");
+        protocol_val.value("trojan", "Trojan");
+        protocol_val.value("vmess", "VMess");
+        protocol_val.value("vless", "VLESS"); // Add VLESS Protocol support
+        s.value("loopback", "Loopback"); // Add Loopback Protocol support
+
+        (
         // Settings Blackhole
         s = r.taboption("general", form.ListValue, "s_blackhole_reponse_type", "%s - %s".format("Blackhole", _("Response type")))).modalonly = !0, 
-        s.depends("protocol", "blackhole"), s.value(""), s.value("none", _("None")), s.value("http", "HTTP"), 
-        (
+        s.depends("protocol", "blackhole"), s.value(""), s.value("none", _("None")), s.value("http", "HTTP");
+
         // Settings DNS
-        s = r.taboption("general", form.ListValue, "s_dns_network", "%s - %s".format("DNS", _("Network")))).modalonly = !0, 
-        s.depends("protocol", "dns"), s.value(""), s.value("tcp", "TCP"), s.value("udp", "UDP"), 
-        (s = r.taboption("general", form.Value, "s_dns_address", "%s - %s".format("DNS", _("Address")))).modalonly = !0, 
-        s.depends("protocol", "dns"), (s = r.taboption("general", form.Value, "s_dns_port", "%s - %s".format("DNS", _("Port")))).modalonly = !0, 
-        s.depends("protocol", "dns"), s.datatype = "port", (
+        const s_dns_network_val = r.taboption("general", form.ListValue, "s_dns_network", "%s - %s".format("DNS", _("Network")));
+        s_dns_network_val.modalonly = !0;
+        s_dns_network_val.value("");
+        s_dns_network_val.value("tcp", "TCP");
+        s_dns_network_val.value("udp", "UDP");
+        s_dns_network_val.depends("protocol", "dns");
+
+        const s_dns_address_val = r.taboption("general", form.Value, "s_dns_address", "%s - %s".format("DNS", _("Address")));
+        s_dns_address_val.modalonly = !0;
+        s_dns_address_val.depends("protocol", "dns");
+
+        const s_dns_port_val = r.taboption("general", form.Value, "s_dns_port", "%s - %s".format("DNS", _("Port")));
+        s_dns_port_val.modalonly = !0,
+            s_dns_port_val.datatype = "port";
+        s_dns_port_val.depends("protocol", "dns");
+
+        (
         // Settings Freedom
         s = r.taboption("general", form.ListValue, "s_freedom_domain_strategy", "%s - %s".format("Freedom", _("Domain strategy")))).modalonly = !0, 
         s.depends("protocol", "freedom"), s.value(""), s.value("AsIs"), s.value("UseIP"), 
@@ -203,43 +230,106 @@ return L.view.extend({
         s.depends("protocol", "vless"), s.value("none", "none"), (
         // Settings Loopback
         s = r.taboption("general", form.Value, "s_loopback_inboundtag", "%s - %s".format("Loopback", _("Inbound tag")))).modalonly = !0, 
-        s.depends("protocol", "loopback"), (
+        s.depends("protocol", "loopback");
         // for (const s in inboundSections) {
         //   o.value(s.caption, s.caption);
         // }
+
         /** Stream Settings **/
-        s = r.taboption("stream", form.ListValue, "ss_network", _("Network"))).value(""), 
-        s.value("tcp", "TCP"), s.value("kcp", "mKCP"), s.value("ws", "WebSocket"), s.value("http", "HTTP/2"), 
-        s.value("domainsocket", "Domain Socket"), s.value("quic", "QUIC"), s.value("grpc", "gRPC"), 
-        (// add gRPC
-        s = r.taboption("stream", form.ListValue, "ss_security", _("Security"))).modalonly = !0, 
-        s.value("none", _("None")), s.value("tls", "TLS"), (
-        // XTLS Flows
-        s = r.taboption("stream", form.ListValue, "s_xtls_flow", _("xTLS Flow"), _("Use xTLS flow"))).modalonly = !0, 
-        s.value("none", _("None")), s.value("xtls-rprx-direct"), s.value("xtls-rprx-direct-udp443"), 
-        s.value("xtls-rprx-origin"), s.value("xtls-rprx-origin-udp443"), s.value("xtls-rprx-splice"), 
-        s.value("xtls-rprx-splice-udp443"), s.value("xtls-rprx-vision"), s.value("xtls-rprx-vision-udp443"), 
-        s.depends("ss_security", "tls"), (
-        // TLS Version
-        s = r.taboption("stream", form.ListValue, "min_tls_version", _("min TLS version"))).modalonly = !0, 
-        s.value("", _("Default")), s.value("1.0"), s.value("1.1"), s.value("1.2"), s.value("1.3"), 
-        s.depends("ss_security", "tls"), (s = r.taboption("stream", form.ListValue, "max_tls_version", _("max TLS version"))).modalonly = !0, 
-        s.value("", _("Default")), s.value("1.0"), s.value("1.1"), s.value("1.2"), s.value("1.3"), 
-        s.depends("ss_security", "tls"), (
+        const ss_network_val = r.taboption("stream", form.ListValue, "ss_network", _("Network"));
+        ss_network_val.value("");
+        ss_network_val.value("tcp", "TCP");
+        ss_network_val.value("kcp", "mKCP");
+        ss_network_val.value("ws", "WebSocket");
+        ss_network_val.value("http", "HTTP/2");
+        ss_network_val.value("domainsocket", "Domain Socket");
+        ss_network_val.value("quic", "QUIC");
+        ss_network_val.value("grpc", "gRPC"); // add gRPC
+
+        const ss_security_val = r.taboption("stream", form.ListValue, "ss_security", _("Security"));
+        ss_security_val.modalonly = true;
+        ss_security_val.value("none", _("None"));
+        ss_security_val.value("tls", "TLS");
+
         // Stream Settings - TLS
-        s = r.taboption("stream", form.Value, "ss_tls_server_name", "%s - %s".format("TLS", _("Server name")))).modalonly = !0, 
-        s.depends("ss_security", "tls"), (s = r.taboption("stream", form.DynamicList, "ss_tls_alpn", "%s - %s".format("TLS", "ALPN"))).modalonly = !0, 
-        s.depends("ss_security", "tls"), s.placeholder = "http/1.1", (
-        //uTLS
-        s = r.taboption("stream", form.ListValue, "u_tls", "uTLS")).modalonly = !0, s.value("", _("None")), 
-        s.value("chrome"), s.value("firefox"), s.value("safari"), s.value("randomized"), 
-        s.depends("ss_security", "tls"), (s = r.taboption("stream", form.Flag, "ss_tls_rejectUnknownSni", "%s - %s".format("TLS", _("Reject Unknown SNI")))).depends("ss_security", "tls"), 
-        s.modalonly = !0, (s = r.taboption("stream", form.Flag, "ss_tls_allow_insecure", "%s - %s".format("TLS", _("Allow insecure")))).modalonly = !0, 
-        s.depends("ss_security", "tls"), (s = r.taboption("stream", form.Flag, "ss_tls_allow_insecure_ciphers", "%s - %s".format("TLS", _("Allow insecure ciphers")))).modalonly = !0, 
-        s.depends("ss_security", "tls"), (s = r.taboption("stream", form.Flag, "ss_tls_disable_system_root", "%s - %s".format("TLS", _("Disable system root")))).modalonly = !0, 
-        s.depends("ss_security", "tls"), (s = r.taboption("stream", form.ListValue, "ss_tls_cert_usage", "%s - %s".format("TLS", _("Certificate usage")))).modalonly = !0, 
-        s.depends("ss_security", "tls"), s.value(""), s.value("encipherment"), s.value("verify"), 
-        s.value("issue"), (
+        const tls_stream_val = r.taboption(
+            "stream",
+            form.Value,
+            "ss_tls_server_name",
+            "%s - %s".format("TLS", _("Server name"))
+        );
+        tls_stream_val.modalonly = true;
+        tls_stream_val.depends("ss_security", "tls");
+
+        const ss_tls_alpn_val = r.taboption(
+            "stream",
+            form.Value,
+            "ss_tls_alpn",
+            "%s - %s".format("TLS", "ALPN")
+        );
+        ss_tls_alpn_val.modalonly = true;
+        ss_tls_alpn_val.placeholder = "http/1.1";
+        ss_tls_alpn_val.depends("ss_security", "tls");
+
+        const ss_tls_allow_insecure_val = r.taboption(
+            "stream",
+            form.Flag,
+            "ss_tls_allow_insecure",
+            "%s - %s".format("TLS", _("Allow insecure"))
+        );
+        ss_tls_allow_insecure_val.modalonly = true;
+        ss_tls_allow_insecure_val.depends("ss_security", "tls");
+
+        const ss_tls_allow_insecure_ciphers_val = r.taboption(
+            "stream",
+            form.Flag,
+            "ss_tls_allow_insecure_ciphers",
+            "%s - %s".format("TLS", _("Allow insecure ciphers"))
+        );
+        ss_tls_allow_insecure_ciphers_val.modalonly = true;
+        ss_tls_allow_insecure_ciphers_val.depends("ss_security", "tls");
+
+        const ss_tls_disable_system_root_val = r.taboption(
+            "stream",
+            form.Flag,
+            "ss_tls_disable_system_root",
+            "%s - %s".format("TLS", _("Disable system root"))
+        );
+        ss_tls_disable_system_root_val.modalonly = true;
+        ss_tls_disable_system_root_val.depends("ss_security", "tls");
+
+        const ss_tls_cert_usage_val = r.taboption(
+            "stream",
+            form.ListValue,
+            "ss_tls_cert_usage",
+            "%s - %s".format("TLS", _("Certificate usage"))
+        );
+        ss_tls_cert_usage_val.modalonly = true;
+        ss_tls_cert_usage_val.value("");
+        ss_tls_cert_usage_val.value("encipherment");
+        ss_tls_cert_usage_val.value("verify");
+        ss_tls_cert_usage_val.value("issue");
+        ss_tls_cert_usage_val.depends("ss_security", "tls");
+
+        const ss_tls_cert_fiile_val = r.taboption(
+            "stream",
+            form.Value,
+            "ss_tls_cert_fiile",
+            "%s - %s".format("TLS", _("Certificate file"))
+        );
+        ss_tls_cert_fiile_val.modalonly = true;
+        ss_tls_cert_fiile_val.depends("ss_security", "tls");
+
+        const ss_tls_key_file = r.taboption(
+            "stream",
+            form.Value,
+            "ss_tls_key_file",
+            "%s - %s".format("TLS", _("Key file"))
+        );
+        ss_tls_key_file.modalonly = true;
+        ss_tls_key_file.depends("ss_security", "tls");
+
+        (
         // o = s.taboption(
         //   "stream",
         //   form.Value,
