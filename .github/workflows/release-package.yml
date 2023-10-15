@@ -15,6 +15,7 @@ jobs:
       SDK_URL_PATH: https://downloads.openwrt.org/releases/19.07.3/targets/x86/64
       SDK_NAME: -sdk-19.07.3-x86-64_
       CONFIG_CCACHE: y
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
     - name: Checkout
       uses: actions/checkout@v2
