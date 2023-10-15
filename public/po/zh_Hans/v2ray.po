@@ -1377,5 +1377,5 @@ msgstr "探测间隔"
 
 
 #: package/htdocs/luci-static/resources/view/v2ray/observatory.ts:102
-msgid "subjectSelector"
+msgid "SubjectSelector"
 msgstr "出站标识前缀"

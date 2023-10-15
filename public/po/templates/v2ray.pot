@@ -1276,6 +1276,6 @@ msgstr ""
 
 
 #: package/htdocs/luci-static/resources/view/v2ray/observatory.ts:102
-msgid "subjectSelector"
+msgid "SubjectSelector"
 msgstr ""
 

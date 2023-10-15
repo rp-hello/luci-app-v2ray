@@ -14,18 +14,7 @@
 
 // @ts-ignore
 return L.view.extend<SectionItem[][]>({
-    // load: function () {
-    //     return Promise.all([
-    //         v2ray.getSections("routing_rule"),
-    //         v2ray.getSections("routing_balancer", "tag"),
-    //         v2ray.getSections("outbound", "tag"),
-    //     ]);
-    // },
-    render: function ([
-        routingRules = [],
-        routingBalancers = [],
-        outBoundSections = [],
-    ] = []) {
+    render: function () {
         const m = new form.Map(
             "v2ray",
             "%s - %s".format(_("V2Ray"), _("Observatory")),
@@ -35,17 +24,20 @@ return L.view.extend<SectionItem[][]>({
         );
 
         const s1 = m.section(form.NamedSection, "main_observatory", "observatory");
-        s1.anonymous = true;
         s1.addremove = false;
 
         let o;
         o = s1.option(form.Flag, "enabled", _("Enabled"));
+        o.rmempty = false;
+
         o = s1.option(form.Value, "probeURL", _("ProbeURL"));
+
         o = s1.option(form.Value, "probeInterval", _("ProbeInterval"));
+
         o = s1.option(
             form.DynamicList,
             "subjectSelector",
-            _("subjectSelector")
+            _("SubjectSelector")
         );
 
         return m.render();
