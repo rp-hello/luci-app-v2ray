@@ -128,16 +128,26 @@ return L.view.extend<SectionItem[][]>({
     o.modalonly = true;
 
     o = s2.option(form.ListValue, "outbound_tag", _("Outbound tag"));
+    o.value("");
     for (const s of outBoundSections) {
-      o.value(s.caption, s.caption);
+      o.value(s.caption);
     }
 
     o = s2.option(form.ListValue, "balancer_tag", _("Balancer tag"));
     o.modalonly = true;
-    o.depends("outbound_tag", "");
+    //o.depends("outbound_tag", "");
+    o.value("");
     for (const s of routingBalancers) {
-      o.value(s.value, s.caption);
+      o.value(s.caption);
     }
+
+    o = s2.option(
+      form.ListValue,
+      "domain_matcher",
+      _("Domain name matching algorithm")
+    );
+    o.value("linear");
+    o.value("mph");
 
     const s3 = m.section(
       form.TypedSection,
