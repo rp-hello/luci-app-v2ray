@@ -334,6 +334,13 @@ outbound_section_validate() {
 		's_socks_account_user:string' \
 		's_socks_account_pass:string' \
 		's_socks_user_level:uinteger' \
+		#variations declarations for VLESS objects
+		's_vless_address:host' \
+		's_vless_port:port' \
+		's_vless_user_id:string' \
+		's_vless_user_level:and(uinteger, max(10))' \
+		's_vless_user_encryption:or("none")' \
+		#············································
 		's_vmess_address:host' \
 		's_vmess_port:port' \
 		's_vmess_user_id:string' \
@@ -1640,6 +1647,32 @@ add_outbound_setting() {
 			json_close_array # vnext
 			json_close_object # settings
 			;;
+#generating VLESS outbounds object
+
+	"vless")
+		  json_add_object "settings"
+			json_add_array "vnext"
+			json_add_object ""
+			json_add_string "address" "$s_vless_address"
+			append_server_address "$s_vless_address"
+			
+			json_add_int "port" "$s_vless_port"
+
+			json_add_array "users"
+			json_add_object ""
+			json_add_string "id" "$s_vless_user_id"
+			test -n "$s_vmess_user_level" && \
+				json_add_int "level" "$s_vless_user_level"
+			json_add_string "encryption" "$s_vless_user_encryption"
+			json_close_object
+			json_close_array # users
+
+			json_close_object
+
+			json_close_array # vnext
+			json_close_object # settings
+			;;
+	#######################################################
 	esac
 
 	json_add_object "streamSettings"
