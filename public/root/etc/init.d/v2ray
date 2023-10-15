@@ -157,7 +157,6 @@ dns_section_validate() {
 		'disable_cache:bool:0' \
 		'disable_fallback:bool:0' \
 		'disable_fallback_if_match:bool:0' \
-		'skip_fallback:bool:0' \
 		'query_strategy:or("UseIP", "UseIPv4", "UseIPv6")' \
 		'tag:string' \
 		'client_ip:ipaddr' \
@@ -171,6 +170,7 @@ dns_server_section_validate() {
 		'port:port' \
 		'domains:list(string)' \
 		'expect_ips:list(string)' \
+		'skip_fallback:bool:0' \
 		'client_ip:ipaddr'
 }
 
@@ -759,8 +759,6 @@ add_dns_settings() {
 		json_add_boolean "disableFallback" "$disable_fallback"
 	test -n "$disable_fallback_if_match" &&
 		json_add_boolean "disableFallbackIfMatch" "$disable_fallback_if_match"
-	test -n "$skip_fallback" &&
-		json_add_boolean "skipFallback" "$skip_fallback"
 	test -n "$query_strategy" &&
 		json_add_string "queryStrategy" "$query_strategy"
 	test -n "$tag" &&
@@ -837,6 +835,8 @@ add_dns_settings() {
 						json_close_array # expectIPs
 					fi
 
+					json_add_boolean "skipFallback" "$skip_fallback"
+					
 					if [ -n "$client_ip" ]; then
 						json_add_string "clientIp" "$client_ip"
 					fi

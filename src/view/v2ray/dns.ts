@@ -44,8 +44,7 @@ return L.view.extend<SectionItem[]>({
       "disable_fallback_if_match",
       _("Disable Fallback If Match")
     );
-    o = s1.option(form.Flag, "skip_fallback", _("Skip Fallback"));
-
+  
     o = s1.option(
       form.Value,
       "client_ip",
@@ -107,6 +106,8 @@ return L.view.extend<SectionItem[]>({
 
     o = s2.option(form.DynamicList, "expect_ips", _("Expect IPs"));
     o.modalonly = true;
+
+    o = s2.option(form.Flag, "skip_fallback", _("Skip Fallback"));
 
     o = s2.option(form.Value, "client_ip", _("Client IP"));
     o.modalonly = true;
