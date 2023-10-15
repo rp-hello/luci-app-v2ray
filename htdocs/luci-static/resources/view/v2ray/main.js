@@ -31,7 +31,7 @@ return L.view.extend({
         return Promise.all([ v2ray.getSections("inbound"), v2ray.getSections("outbound") ]);
     },
     render: function(e) {
-        var o, a = void 0 === e ? [] : e, r = a[0], t = void 0 === r ? [] : r, n = a[1], i = void 0 === n ? [] : n, l = new form.Map("v2ray", "%s - %s".format(_("V2ray"), _("Global Settings")), "<p>%s</p><p>%s</p>".format(_("A platform for building proxies to bypass network restrictions."), _("For more information, please visit: %s").format('<a href="https://www.v2ray.com" target="_blank">https://www.v2ray.com</a>'))), s = l.section(form.NamedSection, "main", "v2ray");
+        var o, a = void 0 === e ? [] : e, r = a[0], t = void 0 === r ? [] : r, n = a[1], i = void 0 === n ? [] : n, l = new form.Map("v2ray", "%s - %s".format(_("V2ray"), _("Global Settings")), "<p>%s</p><p>%s</p>".format(_("A platform for building proxies to bypass network restrictions."), _("For more information, please visit: %s").format('<a href="https://www.v2fly.org" target="_blank">https://www.v2fly.org</a>'))), s = l.section(form.NamedSection, "main", "v2ray");
         s.addremove = !1, s.anonymous = !0, s.option(custom.RunningStatus, "_status"), (o = s.option(form.Flag, "enabled", _("Enabled"))).rmempty = !1, 
         (o = s.option(form.Button, "_reload", _("Reload Service"), _("This will restart service when config file changes."))).inputstyle = "action reload", 
         o.inputtitle = _("Reload"), o.onclick = L.bind(this.handleServiceReload, this), 

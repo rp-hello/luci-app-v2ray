@@ -20,7 +20,7 @@ return L.view.extend({
     },
     render: function(e) {
         void 0 === e && (e = []);
-        var o, n = new form.Map("v2ray", "%s - %s".format(_("V2Ray"), _("Policy")), _("Details: %s").format('<a href="https://www.v2ray.com/en/configuration/policy.html#policyobject" target="_blank">PolicyObject</a>')), l = n.section(form.NamedSection, "main_policy", "policy");
+        var o, n = new form.Map("v2ray", "%s - %s".format(_("V2Ray"), _("Policy")), _("Details: %s").format('<a href="https://www.v2fly.org/config/policy.html#policyobject" target="_blank">PolicyObject</a>')), l = n.section(form.NamedSection, "main_policy", "policy");
         l.anonymous = !0, l.addremove = !1, (o = l.option(form.Flag, "enabled", _("Enabled"))).rmempty = !1, 
         o = l.option(form.MultiValue, "levels", _("Levels"), _("Select policy levels"));
         for (var t = 0, a = e; t < a.length; t++) {
