@@ -20,18 +20,18 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         persist-credentials: false
         fetch-depth: 2
 
     - name: Setup Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
-        node-version: '12.x'
+        node-version: '16'
 
     - name: Setup Node.js Cache
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: node_modules
         key: node-${{ env.PACKAGE_NAME }}-${{ hashFiles('yarn.lock') }}
@@ -63,7 +63,7 @@ jobs:
       run: echo "timestamp=$(date +"%s")" >> $GITHUB_OUTPUT
 
     - name: Setup OpenWrt Cache
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: ${{ env.CACHE_DIR }}
         key: openwrt-${{ env.PACKAGE_NAME }}-${{ steps.cache_key.outputs.timestamp }}
@@ -73,7 +73,7 @@ jobs:
     - name: Install Dependencies
       run: |
         DEBIAN_FRONTEND=noninteractive \
-        sudo apt-get install -y ccache gettext libncurses5-dev xsltproc gcc g++
+        sudo apt-get install -y ccache gettext libncurses5-dev xsltproc gcc g++ python
 
     - name: Create Directories
       run: |
