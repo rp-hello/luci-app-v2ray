@@ -202,7 +202,7 @@ routing_rule_section_validate() {
 		'attrs:string' \
 		'outbound_tag:string' \
 		'balancer_tag:string' \
-		'domain_matcher_r:or("", "linear", "mph")' \
+		'domain_matcher_r:or("", "linear", "mph")' 
 }
 
 routing_balancer_section_validate() {
