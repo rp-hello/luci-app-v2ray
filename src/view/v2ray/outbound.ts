@@ -718,6 +718,8 @@ return L.view.extend<string[]>({
     o.value("xtls-rprx-origin-udp443");
     o.value("xtls-rprx-splice");
     o.value("xtls-rprx-splice-udp443");
+    o.value("xtls-rprx-vision");
+    o.value("xtls-rprx-vision-udp443");
     o.depends("ss_security", "tls");
 
     // Stream Settings - TLS
@@ -748,6 +750,14 @@ return L.view.extend<string[]>({
     o.value("firefox");
     o.value("safari");
     o.value("randomized");
+    o.depends("ss_security", "tls");
+
+    o = s.taboption(
+      "stream",
+      form.Flag,
+      "ss_tls_rejectUnknownSni",
+      "%s - %s".format("TLS", _("Reject Unknown SNI"))
+    );
     o.depends("ss_security", "tls");
 
     o = s.taboption(

@@ -22,6 +22,10 @@ msgstr ""
 msgid "metadata only"
 msgstr ""
 
+#: package/htdocs/luci-static/resources/view/v2ray/outbound.js:560
+msgid "Reject Unknown SNI"
+msgstr ""
+
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:498
 msgid "Service name"
 msgstr ""
