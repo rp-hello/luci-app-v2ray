@@ -18,9 +18,14 @@ return L.view.extend<SectionItem[][]>({
     return Promise.all([
       v2ray.getSections("routing_rule"),
       v2ray.getSections("routing_balancer", "tag"),
+      v2ray.getSections("outbound", "tag"),
     ]);
   },
-  render: function ([routingRules = [], routingBalancers = []] = []) {
+  render: function ([
+    routingRules = [],
+    routingBalancers = [],
+    outBoundSections = [],
+  ] = []) {
     const m = new form.Map(
       "v2ray",
       "%s - %s".format(_("V2Ray"), _("Routing")),
@@ -114,11 +119,17 @@ return L.view.extend<SectionItem[][]>({
     o = s2.option(form.Value, "attrs", _("Attrs"));
     o.modalonly = true;
 
-    o = s2.option(form.Value, "outbound_tag", _("Outbound tag"));
+    o = s2.option(form.ListValue, "outbound_tag", _("Outbound tag"));
+    for (const s of outBoundSections) {
+      o.value(s.caption, s.caption);
+    }
 
-    o = s2.option(form.Value, "balancer_tag", _("Balancer tag"));
+    o = s2.option(form.ListValue, "balancer_tag", _("Balancer tag"));
     o.modalonly = true;
     o.depends("outbound_tag", "");
+    for (const s of routingBalancers) {
+      o.value(s.value, s.caption);
+    }
 
     const s3 = m.section(
       form.TypedSection,
