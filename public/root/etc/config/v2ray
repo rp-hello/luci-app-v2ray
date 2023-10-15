@@ -69,7 +69,6 @@ config routing_rule 'direct_cn_domain'
 	option type 'field'
 	list domain 'geosite:cn'
 	option outbound_tag 'direct'
-	option domain_matcher 'mph'
 
 config routing_rule 'direct_speedtest'
 	option alias 'direct_speedtest'
@@ -118,7 +117,7 @@ config routing_rule 'direct_ntp'
 	list network 'udp'
 	list port '123'
 	option outbound_tag 'direct'
-
+	
 config routing_balancer 'routing_balancer_1'
 	option tag 'balancer'
 	option strategy_type 'random'

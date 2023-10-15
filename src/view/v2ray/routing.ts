@@ -143,9 +143,10 @@ return L.view.extend<SectionItem[][]>({
 
     o = s2.option(
       form.ListValue,
-      "domain_matcher",
+      "domain_matcher_r",
       _("Domain name matching algorithm")
     );
+    o.value("");
     o.value("linear");
     o.value("mph");
 
