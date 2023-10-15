@@ -651,6 +651,11 @@ add_v2ray_tproxy_rules() {
 			fi
 		)
 		-A OUTPUT -j V2RAY_MASK
+
+		:DIVERT -
+		-A DIVERT -j MARK --set-xmark 0x1/0x1
+		-A DIVERT -j ACCEPT
+		-I PREROUTING -p tcp -m socket -j DIVERT
 		COMMIT
 	EOF
 
@@ -710,6 +715,11 @@ add_v2ray_tproxy_rules() {
 			fi
 		)
 		-A OUTPUT -j V2RAY_MASK
+
+		:DIVERT -
+		-A DIVERT -j MARK --set-xmark 0x1/0x1
+		-A DIVERT -j ACCEPT
+		-I PREROUTING -p tcp -m socket -j DIVERT
 		COMMIT
 	EOF
 
