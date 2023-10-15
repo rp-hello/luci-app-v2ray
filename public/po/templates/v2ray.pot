@@ -9,6 +9,14 @@ msgstr ""
 msgid "<code>transport</code> field in top level configuration, JSON string"
 msgstr ""
 
+#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:398
+msgid "Version"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/inbound.js:399
+msgid "metadata only"
+msgstr ""
+
 #: package/htdocs/luci-static/resources/view/v2ray/inbound.js:400
 #: package/htdocs/luci-static/resources/view/v2ray/outbound.js:500
 msgid "XTLS Flow"
@@ -1289,4 +1297,13 @@ msgstr ""
 #: package/htdocs/luci-static/resources/view/v2ray/observatory.ts:102
 msgid "SubjectSelector"
 msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/observatory.ts:103
+msgid "empty use the built-in value"
+msgstr ""
+
+#: package/htdocs/luci-static/resources/view/v2ray/observatory.ts:103
+msgid "A valid URL, it will be get request to testing. eg: <code>%s</code>."
+msgstr ""
+
 

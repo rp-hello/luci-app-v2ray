@@ -321,6 +321,19 @@ return L.view.extend<string[]>({
 
     o = s.taboption(
       "general",
+      form.ListValue,
+      "s_socks_version",
+      "%s - %s".format("Socks", _("Version"))
+    );
+    o.value("");
+    o.value("4", "v4");
+    o.value("4a", "v4a");
+    o.value("5", "v5");
+    o.modalonly = true;
+    o.depends("protocol", "socks");
+
+    o = s.taboption(
+      "general",
       form.Flag,
       "s_socks_udp",
       "%s - %s".format("Socks", _("UDP"))
@@ -972,6 +985,16 @@ return L.view.extend<string[]>({
     o.modalonly = true;
     o.value("http");
     o.value("tls");
+    o.value("fakedns");
+    o.value("fakedns+others");
+
+    o = s.taboption(
+      "other",
+      form.Flag,
+      "metadata_only",
+      "%s - %s".format(_("metadata only"), _("Enabled"))
+    );
+    o.modalonly = true;
 
     o = s.taboption(
       "other",

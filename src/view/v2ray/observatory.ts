@@ -26,7 +26,15 @@ return L.view.extend({
     o = s.option(form.Flag, "enabled", _("Enabled"));
     o.rmempty = false;
 
-    o = s.option(form.Value, "probeURL", _("ProbeURL"));
+    o = s.option(
+      form.Value,
+      "probeURL",
+      _("ProbeURL"),
+      _(
+        "A valid URL, it will be get request to testing. eg: <code>%s</code>."
+      ).format("https://api.github.com/_private/browser/stats")
+    );
+    o.placeholder = _("empty use the built-in value");
 
     o = s.option(form.Value, "probeInterval", _("ProbeInterval"));
 
