@@ -19,7 +19,7 @@ return view.extend({
     return uci.load("luci_v2ray").then((function () {
       let configFile = uci.get("v2ray", "main", "config_file");
       if (!configFile) {
-        configFile = "/var/etc/v2ray/v2ray.main.json";
+        configFile = "/var/etc/luci_v2ray/v2ray.main.json";
       }
 
       return Promise.all([
