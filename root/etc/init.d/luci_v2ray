@@ -2605,8 +2605,8 @@ start_instance() {
 	if [ "$mem_percentage" -gt "0" ]; then
 		local mem_total="$(awk '/MemTotal/ {print $2}' /proc/meminfo)"
 		if [ -n "$mem_total" ]; then
-			local use_mem="$(expr $mem_total \* $mem_percentage \* 10)"
-			procd_append_param limits as="$use_mem $use_mem"
+			local use_mem_in_kib="$(expr $mem_total \* $mem_percentage \/ 100)"
+			procd_set_param env GOMEMLIMIT="${use_mem_in_kib}KiB"
 		fi
 	fi
 
