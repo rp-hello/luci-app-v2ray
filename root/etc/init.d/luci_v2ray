@@ -605,24 +605,17 @@ add_v2ray_tproxy_rules() {
 		:V2RAY -
 		-A V2RAY -j RETURN -m mark --mark 0x2/0x2
 		$(
-			if [ -n "$addition" ] && [ -n "$lan_ipaddrs" ]; then
-				local ipaddr
-				for ipaddr in $lan_ipaddrs; do
-					echo "-A V2RAY -p udp --dport 53 -d $ipaddr -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1"
-					echo "-A V2RAY -p tcp --dport 53 -d $ipaddr -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1"
-				done
+			if [ -n "$addition" ]; then
+				echo "-A V2RAY -p udp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1"
+				echo "-A V2RAY -p tcp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1"
 			fi
 		)
 		-A V2RAY -j RETURN -m set --match-set $ipset_src_direct src
 		-A V2RAY -j RETURN -m set --match-set $ipset_dst_direct dst
 		-A V2RAY -p tcp $ext_args -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1
 		$(
-			if [ -n "$addition" ]; then
-				if [ "$addition" = "dns" ]; then
-					echo "-A V2RAY -p udp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1"
-				else
-					echo "-A V2RAY -p udp -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1"
-				fi
+			if [ "$addition" = "udp" ]; then
+				echo "-A V2RAY -p udp -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1"
 			fi
 
 			if [ -n "$lan_devices" ]; then
@@ -670,24 +663,17 @@ add_v2ray_tproxy_rules() {
 		:V2RAY -
 		-A V2RAY -j RETURN -m mark --mark 0x2/0x2
 		$(
-			if [ -n "$addition" ] && [ -n "$lan_ipaddrs6" ]; then
-				local ipaddr
-				for ipaddr6 in $lan_ipaddrs6; do
-					echo "-A V2RAY -p udp --dport 53 -d $ipaddr6 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
-					echo "-A V2RAY -p tcp --dport 53 -d $ipaddr6 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
-				done
+			if [ -n "$addition" ]; then
+				echo "-A V2RAY -p udp --dport 53 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
+				echo "-A V2RAY -p tcp --dport 53 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
 			fi
 		)
 		-A V2RAY -j RETURN -m set --match-set $ipset_src_direct_v6 src
 		-A V2RAY -j RETURN -m set --match-set $ipset_dst_direct_v6 dst
 		-A V2RAY -p tcp $ext_args -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1
 		$(
-			if [ -n "$addition" ]; then
-				if [ "$addition" = "dns" ]; then
-					echo "-A V2RAY -p udp --dport 53 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
-				else
-					echo "-A V2RAY -p udp -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
-				fi
+			if [ "$addition" = "udp" ]; then
+				echo "-A V2RAY -p udp -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
 			fi
 
 			if [ -n "$lan_devices" ]; then
