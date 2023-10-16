@@ -35,7 +35,7 @@ return view.extend({
     return E([
       E("h2", "%s - %s".format(_("V2Ray"), _("About"))),
       E("p", _("LuCI support for V2Ray.")),
-      E("p", _("Version: %s").format("2.2.5" + "-" + "0")),
+      E("p", _("Version: %s").format("2.2.6" + "-" + "0")),
       E("p", _("Source: %s").format(`
         <a href="https://github.com/rp-hello/luci-app-v2ray" target="_blank">
           https://github.com/rp-hello/luci-app-v2ray
