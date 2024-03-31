@@ -597,7 +597,7 @@ add_v2ray_tproxy_rules() {
 
 	# https://www.kernel.org/doc/Documentation/networking/tproxy.txt
 
-	ip rule add fwmark 0x1 lookup 100
+	ip rule add fwmark 0x1/0x3 lookup 100
 	ip route add local 0.0.0.0/0 dev lo table 100 2>/dev/null
 
 	cat <<-EOF >/tmp/tproxy_iptables.txt
@@ -606,16 +606,16 @@ add_v2ray_tproxy_rules() {
 		-A V2RAY -j RETURN -m mark --mark 0x2/0x3
 		$(
 			if [ -n "$addition" ]; then
-				echo "-A V2RAY -p udp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1"
-				echo "-A V2RAY -p tcp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1"
+				echo "-A V2RAY -p udp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1/0x3"
+				echo "-A V2RAY -p tcp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1/0x3"
 			fi
 		)
 		-A V2RAY -j RETURN -m set --match-set $ipset_src_direct src
 		-A V2RAY -j RETURN -m set --match-set $ipset_dst_direct dst
-		-A V2RAY -p tcp $ext_args -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1
+		-A V2RAY -p tcp $ext_args -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1/0x3
 		$(
 			if [ "$addition" = "udp" ]; then
-				echo "-A V2RAY -p udp -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1"
+				echo "-A V2RAY -p udp -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1/0x3"
 			fi
 
 			if [ -n "$lan_devices" ]; then
@@ -624,7 +624,7 @@ add_v2ray_tproxy_rules() {
 					echo "-A PREROUTING -i $device -j V2RAY"
 				done
 
-				echo "-A PREROUTING -j V2RAY -m mark --mark 0x1/0x1"
+				echo "-A PREROUTING -j V2RAY -m mark --mark 0x1/0x3"
 			else
 				echo "-A PREROUTING -j V2RAY"
 			fi
@@ -648,7 +648,7 @@ add_v2ray_tproxy_rules() {
 
 		# looks like divert has bug
 		# :V2RAY_DIVERT -
-		# -A V2RAY_DIVERT -j MARK --set-mark 0x1/0x1
+		# -A V2RAY_DIVERT -j MARK --set-mark 0x1/0x3
 		# -A V2RAY_DIVERT -j ACCEPT
 		# -I PREROUTING -p tcp -m socket -j V2RAY_DIVERT
 		COMMIT
@@ -656,7 +656,7 @@ add_v2ray_tproxy_rules() {
 
 	iptables-restore --noflush </tmp/tproxy_iptables.txt
 
-	ip -6 rule add fwmark 0x1 lookup 100
+	ip -6 rule add fwmark 0x1/0x3 lookup 100
 	ip -6 route add local ::/0 dev lo table 100
 
 	cat <<-EOF >/tmp/tproxy_ip6tables.txt
@@ -665,16 +665,16 @@ add_v2ray_tproxy_rules() {
 		-A V2RAY -j RETURN -m mark --mark 0x2/0x3
 		$(
 			if [ -n "$addition" ]; then
-				echo "-A V2RAY -p udp --dport 53 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
-				echo "-A V2RAY -p tcp --dport 53 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
+				echo "-A V2RAY -p udp --dport 53 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1/0x3"
+				echo "-A V2RAY -p tcp --dport 53 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1/0x3"
 			fi
 		)
 		-A V2RAY -j RETURN -m set --match-set $ipset_src_direct_v6 src
 		-A V2RAY -j RETURN -m set --match-set $ipset_dst_direct_v6 dst
-		-A V2RAY -p tcp $ext_args -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1
+		-A V2RAY -p tcp $ext_args -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1/0x3
 		$(
 			if [ "$addition" = "udp" ]; then
-				echo "-A V2RAY -p udp -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1"
+				echo "-A V2RAY -p udp -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1/0x3"
 			fi
 
 			if [ -n "$lan_devices" ]; then
@@ -683,7 +683,7 @@ add_v2ray_tproxy_rules() {
 					echo "-A PREROUTING -i $device -j V2RAY"
 				done
 
-				echo "-A PREROUTING -j V2RAY -m mark --mark 0x1/0x1"
+				echo "-A PREROUTING -j V2RAY -m mark --mark 0x1/0x3"
 			else
 				echo "-A PREROUTING -j V2RAY"
 			fi
@@ -707,7 +707,7 @@ add_v2ray_tproxy_rules() {
 
 		# look like divert has bug
 		# :V2RAY_DIVERT -
-		# -A V2RAY_DIVERT -j MARK --set-mark 0x1/0x1
+		# -A V2RAY_DIVERT -j MARK --set-mark 0x1/0x3
 		# -A V2RAY_DIVERT -j ACCEPT
 		# -I PREROUTING -p tcp -m socket -j V2RAY_DIVERT
 		COMMIT
@@ -721,7 +721,7 @@ clear_v2ray_rules() {
 
 	while ip rule del fwmark 1 lookup 100 2>/dev/null; do true; done
 	while ip rule del fwmark 0x1 lookup 100 2>/dev/null; do true; done
-	while ip rule del fwmark 0x1/0x1 lookup 100 2>/dev/null; do true; done
+	while ip rule del fwmark 0x1/0x3 lookup 100 2>/dev/null; do true; done
 
 	ip route flush table 100
 	ip route del local 0.0.0.0/0 dev lo table 100 2>/dev/null
@@ -730,7 +730,7 @@ clear_v2ray_rules() {
 
 	while ip -6 rule del fwmark 1 lookup 100 2>/dev/null; do true; done
 	while ip -6 rule del fwmark 0x1 lookup 100 2>/dev/null; do true; done
-	while ip -6 rule del fwmark 0x1/0x1 lookup 100 2>/dev/null; do true; done
+	while ip -6 rule del fwmark 0x1/0x3 lookup 100 2>/dev/null; do true; done
 
 	ip -6 route flush table 100
 	ip -6 route del local ::/0 dev lo table 100 2>/dev/null
