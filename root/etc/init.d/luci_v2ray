@@ -2484,10 +2484,11 @@ start_instance() {
 			return 1
 		fi
 
-		if ! ( eval "$v2ray_file test --config=\"$config_file\" >/dev/null 2>&1" ) ; then
-			_err "Validate config file failed: $config_file"
-			return 1
-		fi
+		# xray doesn't have test command
+		# if ! ( eval "$v2ray_file test --config=\"$config_file\" >/dev/null 2>&1" ) ; then
+		# 	_err "Validate config file failed: $config_file"
+		# 	return 1
+		# fi
 
 		local file_content="$(cat "$config_file")"
 		local config_commands="$(get_commands_from_json "$file_content")"
