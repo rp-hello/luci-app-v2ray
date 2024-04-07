@@ -646,11 +646,10 @@ add_v2ray_tproxy_rules() {
 		)
 		-A OUTPUT -j V2RAY_MASK
 
-		# looks like divert has bug
-		# :V2RAY_DIVERT -
-		# -A V2RAY_DIVERT -j MARK --set-mark 0x1/0x3
-		# -A V2RAY_DIVERT -j ACCEPT
-		# -I PREROUTING -p tcp -m socket -j V2RAY_DIVERT
+		:V2RAY_DIVERT -
+		-A V2RAY_DIVERT -j MARK --set-mark 0x1/0x3
+		-A V2RAY_DIVERT -j ACCEPT
+		-I PREROUTING -p tcp -m socket --transparent -j V2RAY_DIVERT
 		COMMIT
 	EOF
 
@@ -705,11 +704,10 @@ add_v2ray_tproxy_rules() {
 		)
 		-A OUTPUT -j V2RAY_MASK
 
-		# look like divert has bug
-		# :V2RAY_DIVERT -
-		# -A V2RAY_DIVERT -j MARK --set-mark 0x1/0x3
-		# -A V2RAY_DIVERT -j ACCEPT
-		# -I PREROUTING -p tcp -m socket -j V2RAY_DIVERT
+		:V2RAY_DIVERT -
+		-A V2RAY_DIVERT -j MARK --set-mark 0x1/0x3
+		-A V2RAY_DIVERT -j ACCEPT
+		-I PREROUTING -p tcp -m socket --transparent -j V2RAY_DIVERT
 		COMMIT
 	EOF
 
