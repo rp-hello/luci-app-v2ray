@@ -634,7 +634,7 @@ add_v2ray_tproxy_rules() {
 		-A V2RAY_MASK -j RETURN -m mark --mark 0x2/0x3
 		-A V2RAY_MASK -j RETURN -m set --match-set $ipset_src_direct src
 		-A V2RAY_MASK -j RETURN -m set --match-set $ipset_dst_direct dst
-		-A V2RAY_MASK -p tcp $ext_args -j MARK --set-mark 0x2/0x3
+		-A V2RAY_MASK -p tcp $ext_args -j MARK --set-mark 0x1/0x3
 		$(
 			if [ -n "$addition" ]; then
 				if [ "$addition" = "dns" ]; then
@@ -704,10 +704,11 @@ add_v2ray_tproxy_rules() {
 		)
 		-A OUTPUT -j V2RAY_MASK
 
-		:V2RAY_DIVERT -
-		-A V2RAY_DIVERT -j MARK --set-mark 0x1/0x3
-		-A V2RAY_DIVERT -j ACCEPT
-		-I PREROUTING -p tcp -m socket --transparent -j V2RAY_DIVERT
+		# look like divert has bug
+		# :V2RAY_DIVERT -
+		# -A V2RAY_DIVERT -j MARK --set-mark 0x1/0x3
+		# -A V2RAY_DIVERT -j ACCEPT
+		# -I PREROUTING -p tcp -m socket --transparent -j V2RAY_DIVERT
 		COMMIT
 	EOF
 
