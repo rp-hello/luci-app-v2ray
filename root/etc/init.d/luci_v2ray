@@ -603,7 +603,7 @@ add_v2ray_tproxy_rules() {
 	cat <<-EOF >/tmp/tproxy_iptables.txt
 		*mangle
 		:V2RAY -
-		-A V2RAY -j RETURN -m mark --mark 0x2/0x3
+		-A V2RAY -j RETURN -m mark --mark 0x2/0x2
 		$(
 			if [ -n "$addition" ]; then
 				echo "-A V2RAY -p udp --dport 53 -j TPROXY --on-ip 127.0.0.1 --on-port $port --tproxy-mark 0x1/0x3"
@@ -631,7 +631,7 @@ add_v2ray_tproxy_rules() {
 		)
 
 		:V2RAY_MASK -
-		-A V2RAY_MASK -j RETURN -m mark --mark 0x2/0x3
+		-A V2RAY_MASK -j RETURN -m mark --mark 0x2/0x2
 		-A V2RAY_MASK -j RETURN -m set --match-set $ipset_src_direct src
 		-A V2RAY_MASK -j RETURN -m set --match-set $ipset_dst_direct dst
 		-A V2RAY_MASK -p tcp $ext_args -j MARK --set-mark 0x1/0x3
@@ -661,7 +661,7 @@ add_v2ray_tproxy_rules() {
 	cat <<-EOF >/tmp/tproxy_ip6tables.txt
 		*mangle
 		:V2RAY -
-		-A V2RAY -j RETURN -m mark --mark 0x2/0x3
+		-A V2RAY -j RETURN -m mark --mark 0x2/0x2
 		$(
 			if [ -n "$addition" ]; then
 				echo "-A V2RAY -p udp --dport 53 -j TPROXY --on-ip ::1 --on-port $port --tproxy-mark 0x1/0x3"
@@ -689,7 +689,7 @@ add_v2ray_tproxy_rules() {
 		)
 
 		:V2RAY_MASK -
-		-A V2RAY_MASK -j RETURN -m mark --mark 0x2/0x3
+		-A V2RAY_MASK -j RETURN -m mark --mark 0x2/0x2
 		-A V2RAY_MASK -j RETURN -m set --match-set $ipset_src_direct_v6 src
 		-A V2RAY_MASK -j RETURN -m set --match-set $ipset_dst_direct_v6 dst
 		-A V2RAY_MASK -p tcp $ext_args -j MARK --set-mark 0x1/0x3
@@ -704,11 +704,11 @@ add_v2ray_tproxy_rules() {
 		)
 		-A OUTPUT -j V2RAY_MASK
 
-		# look like divert has bug
-		# :V2RAY_DIVERT -
-		# -A V2RAY_DIVERT -j MARK --set-mark 0x1/0x3
-		# -A V2RAY_DIVERT -j ACCEPT
-		# -I PREROUTING -p tcp -m socket --transparent -j V2RAY_DIVERT
+		#look like divert has bug
+		:V2RAY_DIVERT -
+		-A V2RAY_DIVERT -j MARK --set-mark 0x1/0x3
+		-A V2RAY_DIVERT -j ACCEPT
+		-I PREROUTING -p tcp -m socket -j V2RAY_DIVERT
 		COMMIT
 	EOF
 
