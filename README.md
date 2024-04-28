@@ -8,6 +8,8 @@ Luci support for V2Ray
 [![Latest Release Download](https://img.shields.io/github/downloads/rp-hello/luci-app-v2ray/latest/total.svg)](https://github.com/rp-hello/luci-app-v2ray/releases/latest)
 [![Total Download](https://img.shields.io/github/downloads/rp-hello/luci-app-v2ray/total.svg)](https://github.com/rp-hello/luci-app-v2ray/releases)
 
+This project is forked from <https://github.com/kuoruan/luci-app-v2ray>.
+
 ## Install
 
 ### Manual install
