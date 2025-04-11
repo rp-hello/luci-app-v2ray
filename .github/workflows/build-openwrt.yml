@@ -15,11 +15,11 @@ jobs:
     strategy:
       matrix:
         branch:
-          - openwrt-21.02
-          # - openwrt-22.03
+          # - openwrt-21.02
+          - openwrt-22.03
         arch:
-          - arm_cortex-a7
-          # - arm_cortex-a9
+          # - arm_cortex-a7
+          - aarch64_generic
 
     steps:
       - name: Checkout
