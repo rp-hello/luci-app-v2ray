@@ -37,7 +37,7 @@ jobs:
           PACKAGES: ${{ env.PACKAGE_NAME }}
 
       - name: Store packages
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: luci-app-v2ray-all-packages
           path: bin/packages/${{ matrix.arch }}/action/*.ipk
