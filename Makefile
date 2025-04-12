@@ -5,7 +5,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=luci-app-v2ray
+PKG_NAME:=luci-app-xray
 PKG_VERSION:=2.3.1
 PKG_RELEASE:=0
 
@@ -14,16 +14,16 @@ PKG_MAINTAINER:=Xingwang Liao <kuoruan@gmail.com>
 
 PKG_BUILD_DEPENDS:=luci-base/host
 
-LUCI_TITLE:=LuCI support for v2ray
+LUCI_TITLE:=LuCI support for xray
 LUCI_DEPENDS:=+jshn +ip +ipset +iptables +resolveip +dnsmasq-full \
 	+iptables-mod-tproxy
 LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/conffiles
-/etc/config/luci_v2ray
-/etc/luci_v2ray/transport.json
-/etc/luci_v2ray/directlist.txt
-/etc/luci_v2ray/proxylist.txt
+/etc/config/luci_xray
+/etc/luci_xray/transport.json
+/etc/luci_xray/directlist.txt
+/etc/luci_xray/proxylist.txt
 endef
 
 include $(TOPDIR)/feeds/luci/luci.mk
@@ -32,16 +32,16 @@ define Package/$(PKG_NAME)/postinst
 #!/bin/sh
 
 if [ -z "$${IPKG_INSTROOT}" ] ; then
-	( . /etc/uci-defaults/40_luci-v2ray ) && rm -f /etc/uci-defaults/40_luci-v2ray
+	( . /etc/uci-defaults/40_luci-xray ) && rm -f /etc/uci-defaults/40_luci-xray
 
 	rm -rf /tmp/luci-indexcache /tmp/luci-modulecache/
 
 	killall -HUP rpcd 2>/dev/null
 fi
 
-chmod 755 "$${IPKG_INSTROOT}/etc/init.d/luci_v2ray" >/dev/null 2>&1
-ln -sf "../init.d/luci_v2ray" \
-	"$${IPKG_INSTROOT}/etc/rc.d/S99v2ray" >/dev/null 2>&1
+chmod 755 "$${IPKG_INSTROOT}/etc/init.d/luci_xray" >/dev/null 2>&1
+ln -sf "../init.d/luci_xray" \
+	"$${IPKG_INSTROOT}/etc/rc.d/S99xray" >/dev/null 2>&1
 
 exit 0
 endef
@@ -49,8 +49,8 @@ endef
 define Package/$(PKG_NAME)/postrm
 #!/bin/sh
 
-if [ -s "$${IPKG_INSTROOT}/etc/rc.d/S99v2ray" ] ; then
-	rm -f "$${IPKG_INSTROOT}/etc/rc.d/S99v2ray"
+if [ -s "$${IPKG_INSTROOT}/etc/rc.d/S99xray" ] ; then
+	rm -f "$${IPKG_INSTROOT}/etc/rc.d/S99xray"
 fi
 
 if [ -z "$${IPKG_INSTROOT}" ] ; then

@@ -6,11 +6,11 @@ on:
       "*"
 
 env:
-  PACKAGE_NAME: luci-app-v2ray
+  PACKAGE_NAME: luci-app-xray
 
 jobs:
   build:
-    name: luci-app-v2ray all build
+    name: luci-app-xray all build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -27,7 +27,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
-          path: luci-app-v2ray
+          path: luci-app-xray
 
       - name: Build
         uses: openwrt/gh-action-sdk@main
@@ -39,5 +39,5 @@ jobs:
       - name: Store packages
         uses: actions/upload-artifact@v4
         with:
-          name: luci-app-v2ray-all-packages
+          name: luci-app-xray-all-packages
           path: bin/packages/${{ matrix.arch }}/action/*.ipk

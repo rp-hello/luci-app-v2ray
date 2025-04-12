@@ -1,4 +1,4 @@
-module("luci.controller.v2ray", package.seeall)
+module("luci.controller.xray", package.seeall)
 
 local fs = require "nixio.fs"
 local http = require "luci.http"
@@ -6,33 +6,33 @@ local i18n = require "luci.i18n"
 local sys = require "luci.sys"
 
 function index()
-	if not nixio.fs.access("/etc/config/luci_v2ray") then
+	if not nixio.fs.access("/etc/config/luci_xray") then
 		return
 	end
 
-	entry({"admin", "services", "v2ray"}, firstchild(), _("V2Ray")).dependent = false
+	entry({"admin", "services", "xray"}, firstchild(), _("Xray")).dependent = false
 
-	entry({"admin", "services", "v2ray", "main"}, view("v2ray/main"), _("Global Settings"), 10)
+	entry({"admin", "services", "xray", "main"}, view("xray/main"), _("Global Settings"), 10)
 
-	entry({"admin", "services", "v2ray", "inbound"}, view("v2ray/inbound"), _("Inbound"), 20).leaf = true
+	entry({"admin", "services", "xray", "inbound"}, view("xray/inbound"), _("Inbound"), 20).leaf = true
 
-	entry({"admin", "services", "v2ray", "outbound"}, view("v2ray/outbound"), _("Outbound"), 30).leaf = true
+	entry({"admin", "services", "xray", "outbound"}, view("xray/outbound"), _("Outbound"), 30).leaf = true
 
-	entry({"admin", "services", "v2ray", "dns"}, view("v2ray/dns"), _("DNS"), 40)
+	entry({"admin", "services", "xray", "dns"}, view("xray/dns"), _("DNS"), 40)
 
-  entry({"admin", "services", "v2ray", "routing"}, view("v2ray/routing"), _("Routing"), 50)
+  entry({"admin", "services", "xray", "routing"}, view("xray/routing"), _("Routing"), 50)
 
-  entry({"admin", "services", "v2ray", "observatory"}, view("v2ray/observatory"), _("Observatory"), 60)
+  entry({"admin", "services", "xray", "observatory"}, view("xray/observatory"), _("Observatory"), 60)
 
-	entry({"admin", "services", "v2ray", "policy"}, view("v2ray/policy"), _("Policy"), 70)
+	entry({"admin", "services", "xray", "policy"}, view("xray/policy"), _("Policy"), 70)
 
-	entry({"admin", "services", "v2ray", "reverse"}, view("v2ray/reverse"), _("Reverse"), 80)
+	entry({"admin", "services", "xray", "reverse"}, view("xray/reverse"), _("Reverse"), 80)
 
-	entry({"admin", "services", "v2ray", "transparent-proxy"}, view("v2ray/transparent-proxy"), _("Transparent Proxy"), 90)
+	entry({"admin", "services", "xray", "transparent-proxy"}, view("xray/transparent-proxy"), _("Transparent Proxy"), 90)
 
-  entry({"admin", "services", "v2ray", "about"}, view("v2ray/about"), _("About"), 100)
+  entry({"admin", "services", "xray", "about"}, view("xray/about"), _("About"), 100)
 
-  entry({"admin", "services", "v2ray", "request"}, call("action_request"))
+  entry({"admin", "services", "xray", "request"}, call("action_request"))
 end
 
 function action_request()

@@ -9,14 +9,14 @@
 check_running_status() {
   # here the stupid guy defines that 0 == running, 1 == not in running
 				
-	local pid="$(cat /var/run/luci_v2ray.main.pid 2>/dev/null)"
+	local pid="$(cat /var/run/luci_xray.main.pid 2>/dev/null)"
 
 	if [ -z "$pid" ] ; then
 		echo '{ "code": 1 }'
 		return
 	fi
 
-	local file="$(uci -q get luci_v2ray.main.v2ray_file)"
+	local file="$(uci -q get luci_xray.main.xray_file)"
 
 	if [ -z "$file" ] ; then
 		echo '{ "code": 2 }'
@@ -32,8 +32,8 @@ check_running_status() {
 	fi
 }
 
-get_v2ray_version() {
-	local file="$(uci -q get luci_v2ray.main.v2ray_file)"
+get_xray_version() {
+	local file="$(uci -q get luci_xray.main.xray_file)"
 
 	if [ ! -s "$file" ] ; then
 		echo '{ "code": 1 }'
@@ -59,7 +59,7 @@ get_list_status() {
 		return
 	fi
 
-	local file="/etc/luci_v2ray/${name}.txt"
+	local file="/etc/luci_xray/${name}.txt"
 
 	if [ ! -r "$file" ] ; then
 		echo '{ "code": 2 }'
@@ -75,14 +75,14 @@ get_list_status() {
 
 case "$1" in
 	list)
-		json_set_namespace "v2ray_list" old_ns
+		json_set_namespace "xray_list" old_ns
 
 		json_init
 
 		json_add_object "runningStatus"
 		json_close_object
 
-		json_add_object "v2rayVersion"
+		json_add_object "xrayVersion"
 		json_close_object
 
 		json_add_object "listStatus"
@@ -100,13 +100,13 @@ case "$1" in
 			runningStatus)
 				check_running_status
 			;;
-			v2rayVersion)
-				get_v2ray_version
+			xrayVersion)
+				get_xray_version
 			;;
 			listStatus)
 				read input;
 
-				json_set_namespace "v2ray_listStatus" old_ns
+				json_set_namespace "xray_listStatus" old_ns
 
 				json_load "$input"
 				json_get_var list_name "name"

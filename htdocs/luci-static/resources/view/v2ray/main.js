@@ -12,15 +12,15 @@
 
 "require ui";
 
-"require v2ray";
+"require xray";
 
 // "require view";
-"require view/v2ray/include/custom as custom";
+"require view/xray/include/custom as custom";
 
 var StartControlGroup = form.DummyValue.extend({
     handleServiceReload: function () {
         return fs
-            .exec("/etc/init.d/luci_v2ray", ["reload"])
+            .exec("/etc/init.d/luci_xray", ["reload"])
             .then(
                 L.bind(
                     function (res) {
@@ -44,7 +44,7 @@ var StartControlGroup = form.DummyValue.extend({
     },
     handleServiceStop: function () {
         return fs
-            .exec("/etc/init.d/luci_v2ray", ["stop"])
+            .exec("/etc/init.d/luci_xray", ["stop"])
             .then(
                 L.bind(
                     function (res) {
@@ -68,7 +68,7 @@ var StartControlGroup = form.DummyValue.extend({
     },
     handleServiceStart: function () {
         return fs
-            .exec("/etc/init.d/luci_v2ray", ["start"])
+            .exec("/etc/init.d/luci_xray", ["start"])
             .then(
                 L.bind(
                     function (res) {
@@ -124,12 +124,12 @@ var StartControlGroup = form.DummyValue.extend({
 // @ts-ignore
 return L.view.extend({
     load: function() {
-        return Promise.all([ v2ray.getSections("inbound"), v2ray.getSections("outbound") ]);
+        return Promise.all([ xray.getSections("inbound"), xray.getSections("outbound") ]);
     },
     render: function(e) {
         const m = new form.Map(
-            "luci_v2ray",
-            "%s - %s".format(_("V2ray"), _("Global Settings")),
+            "luci_xray",
+            "%s - %s".format(_("Xray"), _("Global Settings")),
             "<p>%s</p><p>%s</p>".format(
                 _("A platform for building proxies to bypass network restrictions."),
                 _("For more information, please visit: %s").format(
@@ -138,7 +138,7 @@ return L.view.extend({
             )
         );
 
-        const s = m.section(form.NamedSection, "main", "v2ray");
+        const s = m.section(form.NamedSection, "main", "xray");
         s.addremove = false;
         s.anonymous = true;
 
@@ -152,16 +152,16 @@ return L.view.extend({
 
         o = s.option(StartControlGroup, '_reload', _("Reload Service"));
 
-        (o = s.option(form.Value, "v2ray_file", _("V2Ray file"), _("Set the V2Ray executable file path."))).datatype = "file", 
-        o.placeholder = "/usr/bin/v2ray", o.rmempty = !1, (o = s.option(form.Value, "asset_location", _("V2Ray asset location"), _("Directory where geoip.dat and geosite.dat files are, default: same directory as V2Ray file."))).datatype = "directory", 
-        o.placeholder = "/usr/bin", (o = s.option(form.Value, "mem_percentage", _("Memory percentage"), _("The maximum percentage of memory used by V2Ray."))).datatype = "and(uinteger, max(100))", 
+        (o = s.option(form.Value, "xray_file", _("Xray file"), _("Set the Xray executable file path."))).datatype = "file", 
+        o.placeholder = "/usr/bin/xray", o.rmempty = !1, (o = s.option(form.Value, "asset_location", _("Xray asset location"), _("Directory where geoip.dat and geosite.dat files are, default: same directory as Xray file."))).datatype = "directory", 
+        o.placeholder = "/usr/bin", (o = s.option(form.Value, "mem_percentage", _("Memory percentage"), _("The maximum percentage of memory used by Xray."))).datatype = "and(uinteger, max(100))", 
         o.placeholder = "80", (o = s.option(form.Value, "config_file", _("Config file"), _("Use custom config file."))).datatype = "file", 
         o.value("", _("None")), (o = s.option(form.Value, "access_log", _("Access log file"))).depends("config_file", ""), 
-        o.value("/dev/null"), o.value("/var/log/v2ray-access.log"), (o = s.option(form.ListValue, "loglevel", _("Log level"))).depends("config_file", ""), 
+        o.value("/dev/null"), o.value("/var/log/xray-access.log"), (o = s.option(form.ListValue, "loglevel", _("Log level"))).depends("config_file", ""), 
         o.value("debug", _("Debug")), o.value("info", _("Info")), o.value("warning", _("Warning")), 
         o.value("error", _("Error")), o.value("none", _("None")), o.default = "warning", 
         (o = s.option(form.Value, "error_log", _("Error log file"))).value("/dev/null"), 
-        o.value("/var/log/v2ray-error.log"), o.depends("loglevel", "debug"), o.depends("loglevel", "info"), 
+        o.value("/var/log/xray-error.log"), o.depends("loglevel", "debug"), o.depends("loglevel", "info"), 
         o.depends("loglevel", "warning"), o.depends("loglevel", "error"), o = s.option(form.Flag, "dnsLog", _("Enabled DNS log")), 
         (o = s.option(form.MultiValue, "inbounds", _("Inbounds enabled"))).depends("config_file", "");
         for (var d = 0, u = t; d < u.length; d++) {
@@ -186,7 +186,7 @@ return L.view.extend({
         o.wrap = "off";
         o.rows = 5;
         o.datatype = "string";
-        o.filepath = "/etc/luci_v2ray/transport.json";
+        o.filepath = "/etc/luci_xray/transport.json";
         o.required = true;
         o.isjson = true;
         

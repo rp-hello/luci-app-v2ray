@@ -1,33 +1,33 @@
 {
-  "luci-app-v2ray": {
-    "description": "Grant access to LuCI app V2ray",
+  "luci-app-xray": {
+    "description": "Grant access to LuCI app Xray",
     "read": {
       "ubus": {
-        "luci.v2ray": [
+        "luci.xray": [
           "*"
         ]
       },
       "uci": [
-        "luci_v2ray"
+        "luci_xray"
       ],
       "file": {
-        "/etc/luci_v2ray/*": [
+        "/etc/luci_xray/*": [
           "read"
         ],
-        "/var/etc/luci_v2ray/*": [
+        "/var/etc/luci_xray/*": [
           "read"
         ],
-        "/etc/init.d/luci_v2ray": [
+        "/etc/init.d/luci_xray": [
           "exec"
         ]
       }
     },
     "write": {
       "uci": [
-        "luci_v2ray"
+        "luci_xray"
       ],
       "file": {
-        "/etc/luci_v2ray/*": [
+        "/etc/luci_xray/*": [
           "write"
         ]
       }

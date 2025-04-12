@@ -6,7 +6,7 @@
  */
 "use strict";
 
-"require view/v2ray/tools/base64 as base64";
+"require view/xray/tools/base64 as base64";
 
 // @ts-ignore
 return L.Class.extend({

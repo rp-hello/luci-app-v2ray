@@ -25,9 +25,9 @@ return L.Class.extend({
         }));
     },
     getSections: function(r, t) {
-        return void 0 === t && (t = "alias"), uci.load("luci_v2ray").then((function() {
+        return void 0 === t && (t = "alias"), uci.load("luci_xray").then((function() {
             var n = [];
-            return uci.sections("luci_v2ray", r, (function(r) {
+            return uci.sections("luci_xray", r, (function(r) {
                 var e;
                 (e = r[t]) && n.push({
                     caption: e,
@@ -37,9 +37,9 @@ return L.Class.extend({
         }));
     },
     getDokodemoDoorPorts: function() {
-        return uci.load("luci_v2ray").then((function() {
+        return uci.load("luci_xray").then((function() {
             var r = [];
-            return uci.sections("luci_v2ray", "inbound", (function(t) {
+            return uci.sections("luci_xray", "inbound", (function(t) {
                 var n;
                 if ("dokodemo-door" == t.protocol && (n = t.port)) {
                     var e;

@@ -7,20 +7,20 @@
 START=99
 USE_PROCD=1
 
-NAME=luci_v2ray
+NAME=luci_xray
 CONFIG_FOLDER=/var/etc/$NAME
 
 FILE_V2RAY_DNSMASQ=/tmp/dnsmasq.d/$NAME
 FILE_V2RAY_DNSMASQ_CACHE=/tmp/$NAME.dnsmasq.cache
 
-IPSET_SRC_IGNORE_V4=v2ray_src_ignore_v4
-IPSET_SRC_IGNORE_V6=v2ray_src_ignore_v6
-IPSET_DST_PROXY_V4=v2ray_dst_proxy_v4
-IPSET_DST_PROXY_V6=v2ray_dst_proxy_v6
-IPSET_SRC_DIRECT_V4=v2ray_src_direct_v4
-IPSET_SRC_DIRECT_V6=v2ray_src_direct_v6
-IPSET_DST_DIRECT_V4=v2ray_dst_direct_v4
-IPSET_DST_DIRECT_V6=v2ray_dst_direct_v6
+IPSET_SRC_IGNORE_V4=xray_src_ignore_v4
+IPSET_SRC_IGNORE_V6=xray_src_ignore_v6
+IPSET_DST_PROXY_V4=xray_dst_proxy_v4
+IPSET_DST_PROXY_V6=xray_dst_proxy_v6
+IPSET_SRC_DIRECT_V4=xray_src_direct_v4
+IPSET_SRC_DIRECT_V6=xray_src_direct_v6
+IPSET_DST_DIRECT_V4=xray_dst_direct_v4
+IPSET_DST_DIRECT_V6=xray_dst_direct_v6
 
 OUTBOUND_SERVERS_V4=
 OUTBOUND_SERVERS_V6=
@@ -81,9 +81,9 @@ get_file_content() {
 	local filename="$1"
 
 	test -n "$filename" || return
-	test -r "/etc/luci_v2ray/${filename}.txt" || return
+	test -r "/etc/luci_xray/${filename}.txt" || return
 
-	cat "/etc/luci_v2ray/${filename}.txt" | grep -v "^$" | grep -v "^#"
+	cat "/etc/luci_xray/${filename}.txt" | grep -v "^$" | grep -v "^#"
 }
 
 append_server_ipv4() {
@@ -136,10 +136,10 @@ append_server_address() {
 	done
 }
 
-v2ray_section_validate() {
-	uci_validate_section "$NAME" "v2ray" "$1" \
+xray_section_validate() {
+	uci_validate_section "$NAME" "xray" "$1" \
 		'enabled:bool:0' \
-		'v2ray_file:string' \
+		'xray_file:string' \
 		'asset_location:directory' \
 		'mem_percentage:and(uinteger, max(100)):80' \
 		'config_file:file' \
@@ -149,8 +149,8 @@ v2ray_section_validate() {
 		'dnsLog:bool:0' \
 		'stats_enabled:bool:0' \
 		'transport_enabled:bool:0' \
-		'inbounds:list(uci("luci_v2ray", "@inbound"))' \
-		'outbounds:list(uci("luci_v2ray", "@outbound"))'
+		'inbounds:list(uci("luci_xray", "@inbound"))' \
+		'outbounds:list(uci("luci_xray", "@outbound"))'
 }
 
 dns_section_validate() {
@@ -163,7 +163,7 @@ dns_section_validate() {
 		'tag:string' \
 		'client_ip:ipaddr' \
 		'hosts:list(string)' \
-		'servers:list(uci("luci_v2ray", "@dns_server"))'
+		'servers:list(uci("luci_xray", "@dns_server"))'
 }
 
 dns_server_section_validate() {
@@ -189,8 +189,8 @@ routing_section_validate() {
 		'enabled:bool:0' \
 		'domain_strategy:or("AsIs", "IPIfNonMatch", "IPOnDemand")' \
 		'domain_matcher:or("linear", "mph")' \
-		'rules:list(uci("luci_v2ray", "@routing_rule"))' \
-		'balancers:list(uci("luci_v2ray", "@routing_balancer"))'
+		'rules:list(uci("luci_xray", "@routing_rule"))' \
+		'balancers:list(uci("luci_xray", "@routing_balancer"))'
 }
 
 routing_rule_section_validate() {
@@ -220,7 +220,7 @@ routing_balancer_section_validate() {
 policy_section_validate() {
 	uci_validate_section "$NAME" "policy" "$1" \
 		'enabled:bool:0' \
-		'levels:list(uci("luci_v2ray", "@policy_level"))' \
+		'levels:list(uci("luci_xray", "@policy_level"))' \
 		'system_stats_inbound_uplink:bool:0' \
 		'system_stats_inbound_downlink:bool:0'
 }
@@ -425,7 +425,7 @@ outbound_section_validate() {
 		'mux_concurrency:uinteger:8'
 }
 
-add_v2ray_redirect_rules() {
+add_xray_redirect_rules() {
 	local ext_args="$1"
 	local lan_devices="$2"
 	local lan_ipaddrs="$3"
@@ -580,7 +580,7 @@ add_v2ray_redirect_rules() {
 	fi
 }
 
-add_v2ray_tproxy_rules() {
+add_xray_tproxy_rules() {
 	local ext_args="$1"
 	local lan_devices="$2"
 	local lan_ipaddrs="$3"
@@ -715,7 +715,7 @@ add_v2ray_tproxy_rules() {
 	ip6tables-restore --noflush </tmp/tproxy_ip6tables.txt
 }
 
-clear_v2ray_rules() {
+clear_xray_rules() {
 	iptables-save --counters | grep -v "V2RAY" | iptables-restore --counters
 
 	while ip rule del fwmark 1 lookup 100 2>/dev/null; do true; done
@@ -735,7 +735,7 @@ clear_v2ray_rules() {
 	ip -6 route del local ::/0 dev lo table 100 2>/dev/null
 }
 
-create_v2ray_ipset() {
+create_xray_ipset() {
 	# https://en.wikipedia.org/wiki/Reserved_IP_addresses
 	local reserved_v4="$(
 		cat >&1 <<-EOF
@@ -811,9 +811,9 @@ create_v2ray_ipset() {
 	EOF
 }
 
-destroy_v2ray_ipset() {
+destroy_xray_ipset() {
 	ipset -! restore <<-EOF 2>/dev/null
-		$(ipset -n list | grep "^v2ray" | sed "s/^/destroy /")
+		$(ipset -n list | grep "^xray" | sed "s/^/destroy /")
 	EOF
 }
 
@@ -2304,7 +2304,7 @@ setup_transparent_proxy() {
 	fi
 
 	if [ "x$TRANSPARENT_PROXY_EXPECTED" != "x1" ]; then
-		_info "No v2ray instance enabled, skip transparent proxy."
+		_info "No xray instance enabled, skip transparent proxy."
 		return 0
 	fi
 
@@ -2321,7 +2321,7 @@ setup_transparent_proxy() {
 
 	_info "Transparent proxy mode: $proxy_mode"
 
-	create_v2ray_ipset
+	create_xray_ipset
 	init_rules_for_listfile "$direct_list_dns" "$proxy_list_dns"
 
 	local ext_args
@@ -2441,15 +2441,15 @@ setup_transparent_proxy() {
 
 	if [ "x$TRANSPARENT_PROXY_USE_TPROXY" = "x1" ]; then
 		_info "Use TProxy to setup iptables"
-		add_v2ray_tproxy_rules "$ext_args" "$lan_devices" "$lan_ipaddrs" "$lan_ipaddrs6"
+		add_xray_tproxy_rules "$ext_args" "$lan_devices" "$lan_ipaddrs" "$lan_ipaddrs6"
 	else
-		add_v2ray_redirect_rules "$ext_args" "$lan_devices" "$lan_ipaddrs" "$lan_ipaddrs6"
+		add_xray_redirect_rules "$ext_args" "$lan_devices" "$lan_ipaddrs" "$lan_ipaddrs6"
 	fi
 }
 
 clear_transparent_proxy() {
-	clear_v2ray_rules
-	destroy_v2ray_ipset
+	clear_xray_rules
+	destroy_xray_ipset
 
 	if [ -s "$FILE_V2RAY_DNSMASQ" ]; then
 		rm -f "$FILE_V2RAY_DNSMASQ"
@@ -2460,7 +2460,7 @@ clear_transparent_proxy() {
 start_instance() {
 	local section="$1"
 
-	if ! v2ray_section_validate "$section"; then
+	if ! xray_section_validate "$section"; then
 		_err "Invalid config."
 		return 1
 	fi
@@ -2470,12 +2470,12 @@ start_instance() {
 		return 0
 	fi
 
-	if [ -z "$v2ray_file" ] || [ ! -s "$v2ray_file" ]; then
-		_err "Invalid V2Ray file."
+	if [ -z "$xray_file" ] || [ ! -s "$xray_file" ]; then
+		_err "Invalid Xray file."
 		return 1
 	fi
 
-	test -x "$v2ray_file" || chmod 755 "$v2ray_file"
+	test -x "$xray_file" || chmod 755 "$xray_file"
 
 	local temp_config
 
@@ -2486,7 +2486,7 @@ start_instance() {
 		fi
 
 		# xray doesn't have test command
-		# if ! ( eval "$v2ray_file test --config=\"$config_file\" >/dev/null 2>&1" ) ; then
+		# if ! ( eval "$xray_file test --config=\"$config_file\" >/dev/null 2>&1" ) ; then
 		# 	_err "Validate config file failed: $config_file"
 		# 	return 1
 		# fi
@@ -2504,7 +2504,7 @@ start_instance() {
 	else
 		test -d "$CONFIG_FOLDER" || mkdir -p "$CONFIG_FOLDER"
 
-		temp_config="$CONFIG_FOLDER/v2ray.${section}.json"
+		temp_config="$CONFIG_FOLDER/xray.${section}.json"
 
 		local old_ns
 		json_set_namespace "$section" old_ns
@@ -2577,8 +2577,8 @@ start_instance() {
 	TRANSPARENT_PROXY_EXPECTED=1
 
 	procd_open_instance "$NAME.$section"
-	procd_set_param command "/usr/libexec/luci_v2ray/luci_v2ray_entry.sh"
-	procd_append_param env V2RAY_BIN_FILE="$v2ray_file"
+	procd_set_param command "/usr/libexec/luci_xray/luci_xray_entry.sh"
+	procd_append_param env V2RAY_BIN_FILE="$xray_file"
 	procd_append_param command "run"
 	procd_append_param command "--config=$temp_config"
 	procd_set_param respawn
@@ -2619,7 +2619,7 @@ start_service() {
 		return 1
 	fi
 
-	config_foreach start_instance "v2ray"
+	config_foreach start_instance "xray"
 
 	setup_transparent_proxy
 	gracefully_restart_dnsmasq

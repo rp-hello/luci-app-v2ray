@@ -17,14 +17,14 @@
 
 "require ui";
 
-"require v2ray";
+"require xray";
 
 // "require view";
 "require tools/widgets as widgets";
 
-"require view/v2ray/include/custom as custom";
+"require view/xray/include/custom as custom";
 
-"require view/v2ray/tools/converters as converters";
+"require view/xray/tools/converters as converters";
 
 var gfwlistUrls = {
     github: "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt",
@@ -50,10 +50,10 @@ return L.view.extend({
         switch (listtype) {
             case "gfwlist": {
                 const gfwlistMirror =
-                    uci.get("v2ray", section_id, "gfwlist_mirror") || "github";
+                    uci.get("xray", section_id, "gfwlist_mirror") || "github";
                 const url = gfwlistUrls[gfwlistMirror];
 
-                return L.Request.request(L.url("admin/services/v2ray/request"), {
+                return L.Request.request(L.url("admin/services/xray/request"), {
                     method: "post",
                     timeout: 50 * 1000,
                     query: {
@@ -69,7 +69,7 @@ return L.view.extend({
                             if (!data.code && (content = data.content)) {
                                 const gfwlistDomains = converters.extractGFWList(content);
                                 if (gfwlistDomains) {
-                                    fs.write("/etc/v2ray/gfwlist.txt", gfwlistDomains)
+                                    fs.write("/etc/xray/gfwlist.txt", gfwlistDomains)
                                         .then(function () {
                                             ui.showModal(_("List Update"), [
                                                 E("p", _("GFWList updated.")),
@@ -105,11 +105,11 @@ return L.view.extend({
             case "chnroute":
             case "chnroute6": {
                 const delegatedMirror =
-                    uci.get("v2ray", section_id, "apnic_delegated_mirror") || "apnic";
+                    uci.get("xray", section_id, "apnic_delegated_mirror") || "apnic";
 
                 const url = apnicDelegatedUrls[delegatedMirror];
 
-                return L.Request.request(L.url("admin/services/v2ray/request"), {
+                return L.Request.request(L.url("admin/services/xray/request"), {
                     method: "post",
                     timeout: 50 * 1000,
                     query: {
@@ -128,7 +128,7 @@ return L.view.extend({
                                     listtype === "chnroute6"
                                 );
 
-                                fs.write(`/etc/v2ray/${listtype}.txt`, ipList)
+                                fs.write(`/etc/xray/${listtype}.txt`, ipList)
                                     .then(function () {
                                         ui.showModal(_("List Update"), [
                                             E("p", _("CHNRoute list updated.")),
@@ -168,13 +168,13 @@ return L.view.extend({
         }
     },
     load: function () {
-        return v2ray.getDokodemoDoorPorts();
+        return xray.getDokodemoDoorPorts();
     },
     render: function (dokodemoDoorPorts) {
         void 0 === dokodemoDoorPorts && (dokodemoDoorPorts = []);
         const m = new form.Map(
-            "luci_v2ray",
-            "%s - %s".format(_("V2Ray"), _("Transparent Proxy"))
+            "luci_xray",
+            "%s - %s".format(_("Xray"), _("Transparent Proxy"))
         );
 
         const s = m.section(
@@ -228,14 +228,14 @@ return L.view.extend({
             form.Flag,
             "redirect_udp",
             _("Redirect UDP"),
-            _("Redirect UDP traffic to V2Ray.")
+            _("Redirect UDP traffic to Xray.")
         );
 
         o = s.option(
             form.Flag,
             "redirect_dns",
             _("Redirect DNS"),
-            _("Redirect DNS traffic to V2Ray.")
+            _("Redirect DNS traffic to Xray.")
         );
         o.depends("redirect_udp", "");
         o.depends("redirect_udp", "0");
@@ -245,7 +245,7 @@ return L.view.extend({
             "proxy_mode",
             _("Proxy mode"),
             _(
-                "If enabled, iptables rules will be added to pre-filter traffic and then sent to V2Ray."
+                "If enabled, iptables rules will be added to pre-filter traffic and then sent to Xray."
             )
         );
         o.value("default", _("Default"));
@@ -292,7 +292,7 @@ return L.view.extend({
         o.wrap = "off";
         o.rows = 5;
         o.datatype = "string";
-        o.filepath = "/etc/luci_v2ray/proxylist.txt";
+        o.filepath = "/etc/luci_xray/proxylist.txt";
 
         o = s.option(
             custom.TextValue,
@@ -305,7 +305,7 @@ return L.view.extend({
         o.wrap = "off";
         o.rows = 5;
         o.datatype = "string";
-        o.filepath = "/etc/luci_v2ray/directlist.txt";
+        o.filepath = "/etc/luci_xray/directlist.txt";
 
         o = s.option(
             form.Value,
@@ -337,7 +337,7 @@ return L.view.extend({
         o.wrap = "off";
         o.rows = 3;
         o.datatype = "string";
-        o.filepath = "/etc/luci_v2ray/srcdirectlist.txt";
+        o.filepath = "/etc/luci_xray/srcdirectlist.txt";
 
         return m.render();
     }

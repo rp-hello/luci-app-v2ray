@@ -10,16 +10,16 @@
 
 "require uci";
 
-"require v2ray";
+"require xray";
 
 // "require view";
 // @ts-ignore
 return L.view.extend({
     load: function() {
-        return Promise.all([ v2ray.getSections("routing_rule"), v2ray.getSections("routing_balancer", "tag"), v2ray.getSections("outbound", "tag") ]);
+        return Promise.all([ xray.getSections("routing_rule"), xray.getSections("routing_balancer", "tag"), xray.getSections("outbound", "tag") ]);
     },
     render: function(o) {
-        var a, t = void 0 === o ? [] : o, e = t[0], n = void 0 === e ? [] : e, r = t[1], i = void 0 === r ? [] : r, l = t[2], u = void 0 === l ? [] : l, m = new form.Map("luci_v2ray", "%s - %s".format(_("V2Ray"), _("Routing")), _("Details: %s").format('<a href="https://www.v2fly.org/config/routing.html#routingobject" target="_blank">RoutingObject</a>')), s = m.section(form.NamedSection, "main_routing", "routing");
+        var a, t = void 0 === o ? [] : o, e = t[0], n = void 0 === e ? [] : e, r = t[1], i = void 0 === r ? [] : r, l = t[2], u = void 0 === l ? [] : l, m = new form.Map("luci_xray", "%s - %s".format(_("Xray"), _("Routing")), _("Details: %s").format('<a href="https://www.v2fly.org/config/routing.html#routingobject" target="_blank">RoutingObject</a>')), s = m.section(form.NamedSection, "main_routing", "routing");
         s.anonymous = !0, s.addremove = !1, a = s.option(form.Flag, "enabled", _("Enabled")), 
         (a = s.option(form.ListValue, "domain_strategy", _("Domain resolution strategy"))).value(""), 
         a.value("AsIs"), a.value("IPIfNonMatch"), a.value("IPOnDemand"), (a = s.option(form.ListValue, "domain_matcher", _("Domain name matching algorithm"))).value("linear"), 

@@ -12,16 +12,16 @@
 
 "require uci";
 
-"require v2ray";
+"require xray";
 
 // "require view";
 // @ts-ignore
 return L.view.extend({
     load: function() {
-        return v2ray.getLocalIPs();
+        return xray.getLocalIPs();
     },
     render: function(localIPs) {
-        const m = new form.Map("luci_v2ray", "%s - %s".format(_("V2Ray"), _("Inbound")));
+        const m = new form.Map("luci_xray", "%s - %s".format(_("Xray"), _("Inbound")));
 
         if (localIPs === 0) {
             localIPs = [];
@@ -30,7 +30,7 @@ return L.view.extend({
         var e, t = m.section(form.GridSection, "inbound");
         t.anonymous = !0, t.addremove = !0, t.sortable = !0;
         t.modaltitle = function(section_id) {
-            var e = uci.get("luci_v2ray", section_id, "alias");
+            var e = uci.get("luci_xray", section_id, "alias");
             return _("Inbound") + " » " + (null != e ? e : _("Add"));
         };
         t.nodescriptions = true;
@@ -93,7 +93,7 @@ return L.view.extend({
         e.depends("s_socks_auth", "password"), e.password = !0, (e = t.taboption("general", form.ListValue, "s_socks_version", "%s - %s".format("Socks", _("Version")))).value(""), 
         e.value("4", "v4"), e.value("4a", "v4a"), e.value("5", "v5"), e.modalonly = !0, 
         e.depends("protocol", "socks"), (e = t.taboption("general", form.Flag, "s_socks_udp", "%s - %s".format("Socks", _("UDP")))).modalonly = !0, 
-        e.depends("protocol", "socks"), (e = t.taboption("general", form.Value, "s_socks_ip", "%s - %s".format("Socks", _("IP")), _("When UDP is enabled, V2Ray needs to know the IP address of current host."))).modalonly = !0, 
+        e.depends("protocol", "socks"), (e = t.taboption("general", form.Value, "s_socks_ip", "%s - %s".format("Socks", _("IP")), _("When UDP is enabled, Xray needs to know the IP address of current host."))).modalonly = !0, 
         e.depends("s_socks_udp", "1");
         for (var n = 0, d = o; n < d.length; n++) {
             l = d[n];

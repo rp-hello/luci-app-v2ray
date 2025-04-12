@@ -52,6 +52,6 @@ module.exports = {
     base64: "readonly",
     converters: "readonly",
     custom: "readonly",
-    v2ray: "readonly",
+    xray: "readonly",
   },
 };

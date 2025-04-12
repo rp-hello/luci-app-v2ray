@@ -10,14 +10,14 @@
 
 "require uci";
 
-"require v2ray";
+"require xray";
 
 // "require view";
 "require ui";
 
-"require view/v2ray/include/custom as custom";
+"require view/xray/include/custom as custom";
 
-"require view/v2ray/tools/converters as converters";
+"require view/xray/tools/converters as converters";
 
 // @ts-ignore
 return L.view.extend({
@@ -25,50 +25,50 @@ return L.view.extend({
         for (var s = e.split(/\r?\n/), o = 0, t = 0, a = s; t < a.length; t++) {
             var r = a[t], l = void 0;
             if (r && (l = converters.vmessLinkToVmess(r)) && "2" === l.v) {
-                var n = uci.add("luci_v2ray", "outbound");
+                var n = uci.add("luci_xray", "outbound");
                 if (n) {
                     const tls = l.tls || "";
                     var d = l.add || "0.0.0.0", p = l.port || "0", i = l.net || "", u = l.type || "", c = l.path || "", v = l.ps || "%s:%s".format(d, p);
 
-                    uci.set("v2ray", n, "alias", v);
-                    uci.set("v2ray", n, "protocol", "vmess");
-                    uci.set("v2ray", n, "s_vmess_address", d);
-                    uci.set("v2ray", n, "s_vmess_port", p);
-                    uci.set("v2ray", n, "s_vmess_user_id", l.id || "");
-                    // uci.set("v2ray", sid, "s_vmess_user_alter_id", vmess.aid || "");
-                    uci.set("v2ray", n, "ss_security", tls);
+                    uci.set("xray", n, "alias", v);
+                    uci.set("xray", n, "protocol", "vmess");
+                    uci.set("xray", n, "s_vmess_address", d);
+                    uci.set("xray", n, "s_vmess_port", p);
+                    uci.set("xray", n, "s_vmess_user_id", l.id || "");
+                    // uci.set("xray", sid, "s_vmess_user_alter_id", vmess.aid || "");
+                    uci.set("xray", n, "ss_security", tls);
 
                     var f = [];
                     switch (l.host && (f = l.host.split(",")), i) {
                       case "tcp":
-                        uci.set("v2ray", n, "ss_network", "tcp"), uci.set("v2ray", n, "ss_tcp_header_type", u), 
-                        "http" === u && f.length > 0 && (uci.set("v2ray", n, "ss_tcp_header_request_headers", [ "Host=%s".format(f[0]) ]), 
-                        "tls" === tls && uci.set("v2ray", n, "ss_tls_server_name", f[0]));
+                        uci.set("xray", n, "ss_network", "tcp"), uci.set("xray", n, "ss_tcp_header_type", u), 
+                        "http" === u && f.length > 0 && (uci.set("xray", n, "ss_tcp_header_request_headers", [ "Host=%s".format(f[0]) ]), 
+                        "tls" === tls && uci.set("xray", n, "ss_tls_server_name", f[0]));
                         break;
 
                       case "kcp":
                       case "mkcp":
-                        uci.set("v2ray", n, "ss_network", "kcp"), uci.set("v2ray", n, "ss_kcp_header_type", u);
+                        uci.set("xray", n, "ss_network", "kcp"), uci.set("xray", n, "ss_kcp_header_type", u);
                         break;
 
                       case "ws":
-                        uci.set("v2ray", n, "ss_network", "ws"), uci.set("v2ray", n, "ss_websocket_path", c);
+                        uci.set("xray", n, "ss_network", "ws"), uci.set("xray", n, "ss_websocket_path", c);
                         break;
 
                       case "http":
                       case "h2":
-                        uci.set("v2ray", n, "ss_network", "http"), uci.set("v2ray", n, "ss_http_path", c), 
-                        f.length > 0 && (uci.set("v2ray", n, "ss_http_host", f), uci.set("v2ray", n, "ss_tls_server_name", f[0]));
+                        uci.set("xray", n, "ss_network", "http"), uci.set("xray", n, "ss_http_path", c), 
+                        f.length > 0 && (uci.set("xray", n, "ss_http_host", f), uci.set("xray", n, "ss_tls_server_name", f[0]));
                         break;
 
                       case "quic":
-                        uci.set("v2ray", n, "ss_network", "quic"), uci.set("v2ray", n, "ss_quic_header_type", u), 
-                        uci.set("v2ray", n, "ss_quic_key", c), f.length > 0 && (uci.set("v2ray", n, "ss_quic_security", f[0]), 
-                        "tls" === tls && uci.set("v2ray", n, "ss_tls_server_name", f[0]));
+                        uci.set("xray", n, "ss_network", "quic"), uci.set("xray", n, "ss_quic_header_type", u), 
+                        uci.set("xray", n, "ss_quic_key", c), f.length > 0 && (uci.set("xray", n, "ss_quic_security", f[0]), 
+                        "tls" === tls && uci.set("xray", n, "ss_tls_server_name", f[0]));
                         break;
 
                       default:
-                        uci.remove("v2ray", n);
+                        uci.remove("xray", n);
                         continue;
                     }
                     o++;
@@ -116,12 +116,12 @@ return L.view.extend({
         }, _("Save")) ]) ]);
     },
     load: function() {
-        return Promise.all([ v2ray.getLocalIPs() ]);
+        return Promise.all([ xray.getLocalIPs() ]);
     },
     render: function(e) {
-        var s, o = e[0], t = void 0 === o ? [] : o, a = new form.Map("luci_v2ray", "%s - %s".format(_("V2Ray"), _("Outbound"))), r = a.section(form.GridSection, "outbound");
+        var s, o = e[0], t = void 0 === o ? [] : o, a = new form.Map("luci_xray", "%s - %s".format(_("Xray"), _("Outbound"))), r = a.section(form.GridSection, "outbound");
         r.anonymous = !0, r.addremove = !0, r.sortable = !0, r.modaltitle = function(e) {
-            var s = uci.get("luci_v2ray", e, "alias");
+            var s = uci.get("luci_xray", e, "alias");
             return _("Outbound") + " » " + (null != s ? s : _("Add"));
         }, r.nodescriptions = !0, r.tab("general", _("General Settings")), r.tab("stream", _("Stream Settings")), 
         r.tab("other", _("Other Settings")), (
@@ -413,7 +413,7 @@ return L.view.extend({
         s.datatype = "uinteger", s.placeholder = "8";
         var p = this;
         return a.render().then((function(e) {
-            var s = a.findElement("id", "cbi-v2ray-outbound"), o = E("div", {
+            var s = a.findElement("id", "cbi-xray-outbound"), o = E("div", {
                 class: "cbi-section-create cbi-tblsection-create"
             }, E("button", {
                 class: "cbi-button cbi-button-neutral",

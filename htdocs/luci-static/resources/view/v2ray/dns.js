@@ -10,17 +10,17 @@
 
 "require uci";
 
-"require v2ray";
+"require xray";
 
 // "require view";
 // @ts-ignore
 return L.view.extend({
     load: function() {
-        return v2ray.getSections("dns_server");
+        return xray.getSections("dns_server");
     },
     render: function(e) {
         void 0 === e && (e = []);
-        var a, o = new form.Map("luci_v2ray", "%s - %s".format(_("V2Ray"), _("DNS")), _("Details: %s").format('<a href="https://www.v2fly.org/config/dns.html#dnsobject" target="_blank">DnsObject</a>')), r = o.section(form.NamedSection, "main_dns", "dns");
+        var a, o = new form.Map("luci_xray", "%s - %s".format(_("Xray"), _("DNS")), _("Details: %s").format('<a href="https://www.v2fly.org/config/dns.html#dnsobject" target="_blank">DnsObject</a>')), r = o.section(form.NamedSection, "main_dns", "dns");
         r.anonymous = !0, r.addremove = !1, (a = r.option(form.Flag, "enabled", _("Enabled"))).rmempty = !1, 
         a = r.option(form.Value, "tag", _("Tag")), a = r.option(form.Flag, "disable_cache", _("Disable Cache")), 
         a = r.option(form.Flag, "disable_fallback", _("Disable Fallback")), a = r.option(form.Flag, "disable_fallback_if_match", _("Disable Fallback If Match")), 

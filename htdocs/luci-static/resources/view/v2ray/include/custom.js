@@ -20,7 +20,7 @@
 "require ui";
 
 var callRunningStatus = rpc.declare({
-    object: "luci.v2ray",
+    object: "luci.xray",
     method: "runningStatus",
     params: [],
     expect: {
@@ -29,7 +29,7 @@ var callRunningStatus = rpc.declare({
         }
     }
 }), callListStatus = rpc.declare({
-    object: "luci.v2ray",
+    object: "luci.xray",
     method: "listStatus",
     params: [ "name" ],
     expect: {
@@ -46,9 +46,9 @@ var callRunningStatus = rpc.declare({
             datetime: _("Unknown")
         };
     }
-}), callV2RayVersion = rpc.declare({
-    object: "luci.v2ray",
-    method: "v2rayVersion",
+}), callXrayVersion = rpc.declare({
+    object: "luci.xray",
+    method: "xrayVersion",
     params: [],
     expect: {
         "": {
@@ -136,10 +136,10 @@ var callRunningStatus = rpc.declare({
 }), CUSTOMRunningStatus = form.AbstractValue.extend({
     __name__: "CUSTOM.RunningStatus",
     fetchVersion: function(t) {
-        L.resolveDefault(callV2RayVersion(), "").then((function(e) {
+        L.resolveDefault(callXrayVersion(), "").then((function(e) {
             L.dom.content(t, e ? _("Version: %s").format(e) : E("em", {
                 style: "color: red;"
-            }, _("Unable to get V2Ray version.")));
+            }, _("Unable to get Xray version.")));
         }));
     },
     pollStatus: function(t) {

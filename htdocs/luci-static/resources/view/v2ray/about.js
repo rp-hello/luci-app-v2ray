@@ -16,10 +16,10 @@
 
 return view.extend({
   load: function () {
-    return uci.load("luci_v2ray").then((function () {
-      let configFile = uci.get("v2ray", "main", "config_file");
+    return uci.load("luci_xray").then((function () {
+      let configFile = uci.get("xray", "main", "config_file");
       if (!configFile) {
-        configFile = "/var/etc/luci_v2ray/v2ray.main.json";
+        configFile = "/var/etc/luci_xray/xray.main.json";
       }
 
       return Promise.all([
@@ -33,22 +33,22 @@ return view.extend({
     const configContent = data[1] ? data[1] : "";
 
     return E([
-      E("h2", "%s - %s".format(_("V2Ray"), _("About"))),
-      E("p", _("LuCI support for V2Ray.")),
+      E("h2", "%s - %s".format(_("Xray"), _("About"))),
+      E("p", _("LuCI support for Xray.")),
       E("p", _("Version: %s").format("2.3.1" + "-" + "0")),
       E("p", _("Source: %s").format(`
-        <a href="https://github.com/rp-hello/luci-app-v2ray" target="_blank">
-          https://github.com/rp-hello/luci-app-v2ray
+        <a href="https://github.com/rp-hello/luci-app-xray" target="_blank">
+          https://github.com/rp-hello/luci-app-xray
         </a>
       `)),
       E("p", _("Latest: %s").format(`
-        <a href="https://github.com/rp-hello/luci-app-v2ray/releases/latest" target="_blank">
-          https://github.com/rp-hello/luci-app-v2ray
+        <a href="https://github.com/rp-hello/luci-app-xray/releases/latest" target="_blank">
+          https://github.com/rp-hello/luci-app-xray
         </a>
       `)),
       E("p", _("Report Bugs: %s").format(`
-        <a href="https://github.com/rp-hello/luci-app-v2ray/issues" target="_blank">
-          https://github.com/rp-hello/luci-app-v2ray/issues
+        <a href="https://github.com/rp-hello/luci-app-xray/issues" target="_blank">
+          https://github.com/rp-hello/luci-app-xray/issues
         </a>
       `)),
       E("p", _("Current Config File: %s").format(configFile)),
